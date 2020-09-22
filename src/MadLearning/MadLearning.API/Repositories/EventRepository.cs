@@ -33,10 +33,6 @@ namespace MadLearning.API.Repositories
 
         public async Task<List<EventModel>> GetEvents(EventFilter eventFilter)
         {
-
-            var id1 = MongoDB.Bson.ObjectId.GenerateNewId();
-            var id2 = MongoDB.Bson.ObjectId.GenerateNewId();
-
             var filter = CreateFilter(eventFilter);
 
             var events = await collection.FindAsync(filter);
