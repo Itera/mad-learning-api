@@ -1,17 +1,18 @@
 ﻿using MadLearning.API.Models;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MadLearning.API.Repositories
 {
     public interface IEventRepository
     {
-        Task<List<EventModel>> GetEvents(EventFilter eventFilter);
+        Task<List<EventModel>> GetEvents(EventFilter eventFilter, CancellationToken cancellationToken);
 
-        Task<EventModel> CreateEvent(EventModel eventModel);
+        Task<EventModel> CreateEvent(EventModel eventModel, CancellationToken cancellationToken);
 
-        Task DeleteEvent(EventModel eventModel);
+        Task DeleteEvent(EventModel eventModel, CancellationToken cancellationToken);
 
-        Task UpdateEvent(EventModel eventModel);
+        Task UpdateEvent(EventModel eventModel, CancellationToken cancellationToken);
     }
 }
