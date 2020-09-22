@@ -1,4 +1,4 @@
-﻿namespace MadLearning.API.Model
+﻿namespace MadLearning.API.Models
 {
     public class PersonModel
     {
