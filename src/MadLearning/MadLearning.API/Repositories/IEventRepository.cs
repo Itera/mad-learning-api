@@ -1,8 +1,8 @@
-﻿using MadLearning.API.Model;
+﻿using MadLearning.API.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MadLearning.API.Service
+namespace MadLearning.API.Repositories
 {
     public interface IEventRepository
     {

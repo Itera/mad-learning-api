@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MadLearning.API.Config
+﻿namespace MadLearning.API.Config
 {
-    public class EventDbSettings : IEventDbSettings
+    public class EventDbSettings
     {
         public string EventCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
-    }
-
-    public interface IEventDbSettings
-    {
-        string EventCollectionName { get; set; }
-        string ConnectionString { get; set; }
-
-        string DatabaseName { get; set; }
     }
 }

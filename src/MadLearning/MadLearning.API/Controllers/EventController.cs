@@ -1,5 +1,5 @@
-﻿using MadLearning.API.Model;
-using MadLearning.API.Service;
+﻿using MadLearning.API.Models;
+using MadLearning.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;

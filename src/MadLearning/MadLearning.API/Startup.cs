@@ -1,5 +1,5 @@
 using MadLearning.API.Config;
-using MadLearning.API.Service;
+using MadLearning.API.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +26,7 @@ namespace MadLearning.API
                     Configuration.GetSection(nameof(EventDbSettings))
                 );
 
-            services.AddSingleton<IEventDbSettings>(sp =>
+            services.AddSingleton(sp =>
                     sp.GetRequiredService<IOptions<EventDbSettings>>().Value
                 );
 

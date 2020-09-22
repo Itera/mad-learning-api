@@ -1,19 +1,18 @@
 ﻿using MadLearning.API.Config;
-using MadLearning.API.Model;
+using MadLearning.API.Models;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MadLearning.API.Service
+namespace MadLearning.API.Repositories
 {
     public class EventRepository : IEventRepository
     {
         private readonly IMongoCollection<EventModel> collection;
 
-        public EventRepository(IEventDbSettings eventDbSettings)
+        public EventRepository(EventDbSettings eventDbSettings)
         {
-       
             var client = new MongoClient(eventDbSettings.ConnectionString);
             var database = client.GetDatabase(eventDbSettings.DatabaseName);
 
@@ -34,11 +33,15 @@ namespace MadLearning.API.Service
 
         public async Task<List<EventModel>> GetEvents(EventFilter eventFilter)
         {
+
+            var id1 = MongoDB.Bson.ObjectId.GenerateNewId();
+            var id2 = MongoDB.Bson.ObjectId.GenerateNewId();
+
             var filter = CreateFilter(eventFilter);
 
             var events = await collection.FindAsync(filter);
 
-            return events.ToList();
+            return await events.ToListAsync();
         }
 
         public async Task UpdateEvent(EventModel eventModel)
