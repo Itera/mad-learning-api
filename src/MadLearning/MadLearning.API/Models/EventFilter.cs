@@ -2,11 +2,10 @@
 
 namespace MadLearning.API.Models
 {
-
-    public class EventFilter
+    public record EventFilter
     {
-        public DateTimeOffset From { get; set; } = DateTimeOffset.MinValue;
+        public DateTimeOffset From { get; init; } = DateTimeOffset.MinValue;
 
-        public DateTimeOffset To { get; set; } = DateTimeOffset.MaxValue;
+        public DateTimeOffset To { get; init; } = DateTimeOffset.MaxValue;
     }
 }
