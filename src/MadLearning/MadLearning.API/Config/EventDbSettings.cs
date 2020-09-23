@@ -8,8 +8,11 @@ namespace MadLearning.API.Config
         public string? ConnectionString { get; init; }
         public string? DatabaseName { get; init; }
 
-        public static implicit operator EventDbSettings(EventDbSettingsDto dto)
+        public static implicit operator EventDbSettings(EventDbSettingsDto? dto)
         {
+            if (dto is null)
+                throw new ArgumentNullException(nameof(dto));
+
             if (string.IsNullOrWhiteSpace(dto.EventCollectionName))
                 throw new ArgumentException($"Can't create {nameof(EventDbSettings)} when {nameof(EventCollectionName)} is null");
             if (string.IsNullOrWhiteSpace(dto.ConnectionString))

@@ -8,7 +8,7 @@ using MongoDB.Driver;
 
 namespace MadLearning.API.Repositories
 {
-    public class EventRepository : IEventRepository
+    internal class EventRepository : IEventRepository
     {
         private readonly IMongoCollection<EventModel> collection;
 
@@ -38,7 +38,7 @@ namespace MadLearning.API.Repositories
 
             var events = await this.collection.FindAsync(filter, cancellationToken: cancellationToken);
 
-            return await events.ToListAsync();
+            return await events.ToListAsync(cancellationToken);
 
             static FilterDefinition<EventModel> CreateFilter(EventFilter eventFilter)
             {

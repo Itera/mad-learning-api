@@ -23,6 +23,6 @@ namespace MadLearning.API.Models
 
         public PersonModel? Owner { get; set; }
 
-        public List<PersonModel> Participants { get; set; } = new List<PersonModel>();
+        public List<PersonModel> Participants { get; init; } = new List<PersonModel>();
     }
 }
