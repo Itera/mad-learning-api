@@ -14,7 +14,7 @@ namespace MadLearning.API
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -22,18 +22,16 @@ namespace MadLearning.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<EventDbSettings>(
-                    Configuration.GetSection(nameof(EventDbSettings))
-                );
+            services.Configure<EventDbSettingsDto>(
+                    this.Configuration.GetSection(nameof(EventDbSettings)));
 
-            services.AddSingleton(sp =>
-                    sp.GetRequiredService<IOptions<EventDbSettings>>().Value
-                );
+            services.AddSingleton<EventDbSettings>(static sp =>
+                    sp.GetRequiredService<IOptions<EventDbSettingsDto>>().Value);
 
             services.AddSingleton<IEventRepository, EventRepository>();
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(static c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MadLearning.API", Version = "v1" });
             });
@@ -46,7 +44,7 @@ namespace MadLearning.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MadLearning.API v1"));
+                app.UseSwaggerUI(static c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MadLearning.API v1"));
             }
 
             app.UseHttpsRedirection();
@@ -55,7 +53,7 @@ namespace MadLearning.API
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(static endpoints =>
             {
                 endpoints.MapControllers();
             });

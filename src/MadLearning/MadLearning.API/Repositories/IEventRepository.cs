@@ -1,7 +1,7 @@
-﻿using MadLearning.API.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using MadLearning.API.Models;
 
 namespace MadLearning.API.Repositories
 {

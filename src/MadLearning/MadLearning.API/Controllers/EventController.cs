@@ -1,9 +1,9 @@
-﻿using MadLearning.API.Models;
-using MadLearning.API.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using MadLearning.API.Models;
+using MadLearning.API.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MadLearning.API.Controllers
 {
@@ -21,7 +21,7 @@ namespace MadLearning.API.Controllers
         [HttpGet]
         public async Task<List<EventModel>> GetEvent([FromQuery] EventFilter eventFilter, CancellationToken cancellationToken)
         {
-            var events = await eventService.GetEvents(eventFilter, cancellationToken);
+            var events = await this.eventService.GetEvents(eventFilter, cancellationToken);
 
             return events;
         }
@@ -29,19 +29,19 @@ namespace MadLearning.API.Controllers
         [HttpPost]
         public async Task CreateEvent([FromBody] EventModel eventModel, CancellationToken cancellationToken)
         {
-            await eventService.CreateEvent(eventModel, cancellationToken);        
+            await this.eventService.CreateEvent(eventModel, cancellationToken);
         }
 
         [HttpPut]
         public async Task UpdateEvent([FromBody] EventModel eventModel, CancellationToken cancellationToken)
         {
-            await eventService.UpdateEvent(eventModel, cancellationToken);
+            await this.eventService.UpdateEvent(eventModel, cancellationToken);
         }
 
         [HttpDelete]
         public async Task DeleteEvent([FromBody] EventModel eventModel, CancellationToken cancellationToken)
-        { 
-            await eventService.DeleteEvent(eventModel, cancellationToken);
+        {
+            await this.eventService.DeleteEvent(eventModel, cancellationToken);
         }
     }
 }
