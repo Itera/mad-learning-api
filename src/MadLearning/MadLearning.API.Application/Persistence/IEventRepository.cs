@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using MadLearning.API.Application.Dtos;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MadLearning.API.Dtos;
-using MadLearning.API.Models;
 
-namespace MadLearning.API.Repositories
+namespace MadLearning.API.Application.Persistence
 {
     public interface IEventRepository
     {
-        Task<List<GetEventModelApiDto>> GetEvents(EventFilter eventFilter, CancellationToken cancellationToken);
+        Task<GetEventModelApiDto?> GetEvent(string eventId, CancellationToken cancellationToken);
+
+        Task<List<GetEventModelApiDto>> GetEvents(EventFilterApiDto eventFilter, CancellationToken cancellationToken);
 
         Task<GetEventModelApiDto> CreateEvent(CreateEventModelApiDto eventModel, CancellationToken cancellationToken);
 

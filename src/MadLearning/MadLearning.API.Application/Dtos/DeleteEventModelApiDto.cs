@@ -1,4 +1,4 @@
-﻿namespace MadLearning.API.Dtos
+﻿namespace MadLearning.API.Application.Dtos
 {
     public record DeleteEventModelApiDto(string Id);
 }
