@@ -1,6 +1,6 @@
 ﻿namespace MadLearning.API.Models
 {
-    public class PersonModel
+    public sealed class PersonModel
     {
         public string? Id { get; init; }
 
