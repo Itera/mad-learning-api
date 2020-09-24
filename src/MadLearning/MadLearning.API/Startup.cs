@@ -9,7 +9,7 @@ using Microsoft.OpenApi.Models;
 
 namespace MadLearning.API
 {
-    public class Startup
+    internal sealed class Startup
     {
         public Startup(IConfiguration configuration)
         {

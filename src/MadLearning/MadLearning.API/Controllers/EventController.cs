@@ -1,4 +1,5 @@
 ﻿using MadLearning.API.Application.Dtos;
+using MadLearning.API.Application.Events.Queries;
 using MadLearning.API.Application.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace MadLearning.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EventController : ControllerBase
+    public sealed class EventController : ApiControllerBase
     {
         private readonly IEventRepository eventRepository;
 
@@ -18,18 +19,18 @@ namespace MadLearning.API.Controllers
             this.eventRepository = eventService;
         }
 
+        [HttpGet("{eventId}")]
+        public async Task<GetEventModelApiDto?> GetEvent(string eventId, CancellationToken cancellationToken)
+        {
+            return await this.Mediator.Send(new GetEvent(eventId), cancellationToken);
+        }
+
         [HttpGet]
         public async Task<List<GetEventModelApiDto>> GetEvents([FromQuery] EventFilterApiDto eventFilter, CancellationToken cancellationToken)
         {
             var events = await this.eventRepository.GetEvents(eventFilter, cancellationToken);
 
             return events;
-        }
-
-        [HttpGet("{eventId}")]
-        public async Task<GetEventModelApiDto?> GetEvent(string eventId, CancellationToken cancellationToken)
-        {
-            return await this.eventRepository.GetEvent(eventId, cancellationToken);
         }
 
         [HttpPost]
