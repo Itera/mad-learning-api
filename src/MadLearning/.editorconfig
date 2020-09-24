@@ -107,9 +107,6 @@ csharp_style_throw_expression = true:suggestion
 csharp_style_unused_value_assignment_preference = discard_variable:suggestion
 csharp_style_unused_value_expression_statement_preference = discard_variable:silent
 
-# 'using' directive preferences
-csharp_using_directive_placement = inside_namespace:silent
-
 #### C# Formatting Rules ####
 
 # New line preferences
@@ -214,6 +211,9 @@ dotnet_diagnostic.SA1600.severity = none
 # SA1200: Using directives should be placed correctly
 dotnet_diagnostic.SA1200.severity = none
 
+# SA1208: Using directive ordering
+dotnet_diagnostic.SA1208.severity = none
+
 # SA1503: Braces should not be omitted
 dotnet_diagnostic.SA1503.severity = none
 
@@ -236,8 +236,26 @@ dotnet_diagnostic.CA2007.severity = none
 # C# 9 - should pass when the setter is init only
 dotnet_diagnostic.CA2227.severity = none
 
-# CA1812: EventRepository is an internal class that is apparently never instantiated. If so, remove the code from the assembly. If this class is intended to contain only static members, make it static (Shared in Visual Basic).
-dotnet_diagnostic.CA1812.severity = none
-
 # CA1720: Identifiers should not contain type names
 dotnet_diagnostic.CA1720.severity = none
+
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = none
+
+# SA1512: Single-line comments should not be followed by blank line
+dotnet_diagnostic.SA1512.severity = none
+
+# CA1812: X is an internal class that is apparently never instantiated. If so, remove the code from the assembly. If this class is intended to contain only static members, make it static (Shared in Visual Basic).
+dotnet_diagnostic.CA1812.severity = none
+
+# SA1005: Single-line comments should begin with a space
+dotnet_diagnostic.SA1005.severity = none
+
+# SA1515: Single-line comments should be preceded by blank line
+dotnet_diagnostic.SA1515.severity = none
+
+# CA1724: The type name X conflicts in whole or in part with the namespace name 'Y'
+dotnet_diagnostic.CA1724.severity = none
+
+# SA1009: Closing parenthesis should not be followed by a space
+dotnet_diagnostic.SA1009.severity = none

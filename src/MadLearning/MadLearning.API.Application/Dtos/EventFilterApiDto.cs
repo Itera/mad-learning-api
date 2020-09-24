@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace MadLearning.API.Models
+namespace MadLearning.API.Application.Dtos
 {
-    public record EventFilter
+    public record EventFilterApiDto
     {
         public DateTimeOffset From { get; init; } = DateTimeOffset.MinValue;
 

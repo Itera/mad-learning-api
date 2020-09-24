@@ -1,16 +1,15 @@
-using MadLearning.API.Config;
-using MadLearning.API.Repositories;
+using MadLearning.API.Application;
+using MadLearning.API.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 namespace MadLearning.API
 {
-    public class Startup
+    internal sealed class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -22,13 +21,9 @@ namespace MadLearning.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<EventDbSettingsDto>(
-                    this.Configuration.GetSection(nameof(EventDbSettings)));
-
-            services.AddSingleton<EventDbSettings>(static sp =>
-                    sp.GetRequiredService<IOptions<EventDbSettingsDto>>().Value);
-
-            services.AddSingleton<IEventRepository, EventRepository>();
+            services
+                .AddApplication()
+                .AddInfrastructure(this.Configuration);
 
             services.AddControllers();
             services.AddSwaggerGen(static c =>

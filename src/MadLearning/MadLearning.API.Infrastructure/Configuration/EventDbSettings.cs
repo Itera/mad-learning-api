@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MadLearning.API.Config
+namespace MadLearning.API.Infrastructure.Configuration
 {
     public record EventDbSettingsDto
     {

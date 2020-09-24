@@ -1,6 +1,9 @@
-﻿namespace MadLearning.API.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace MadLearning.API.Application.Dtos
 {
-    public class PersonModel
+    public sealed class PersonModelDbDto
     {
         public string? Id { get; init; }
 
