@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30509.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadLearning.API", "MadLearning.API\MadLearning.API.csproj", "{CE579D73-50FE-4981-8121-6428E9FE2A79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MadLearning.API", "MadLearning.API\MadLearning.API.csproj", "{CE579D73-50FE-4981-8121-6428E9FE2A79}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ECCCBA4D-E36C-4FBF-B986-ABFF19518B48}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadLearning.API.Domain", "MadLearning.API.Domain\MadLearning.API.Domain.csproj", "{1226CE52-6D06-41A0-90C9-17CC03E09CCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadLearning.API.Application", "MadLearning.API.Application\MadLearning.API.Application.csproj", "{F643F52A-6C23-491D-9DB2-C549D6F7EF77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadLearning.API.Infrastructure", "MadLearning.API.Infrastructure\MadLearning.API.Infrastructure.csproj", "{64020F90-A2A3-4B52-84BE-1F794AF0ACA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +27,18 @@ Global
 		{CE579D73-50FE-4981-8121-6428E9FE2A79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE579D73-50FE-4981-8121-6428E9FE2A79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE579D73-50FE-4981-8121-6428E9FE2A79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1226CE52-6D06-41A0-90C9-17CC03E09CCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1226CE52-6D06-41A0-90C9-17CC03E09CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1226CE52-6D06-41A0-90C9-17CC03E09CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1226CE52-6D06-41A0-90C9-17CC03E09CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F643F52A-6C23-491D-9DB2-C549D6F7EF77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F643F52A-6C23-491D-9DB2-C549D6F7EF77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F643F52A-6C23-491D-9DB2-C549D6F7EF77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F643F52A-6C23-491D-9DB2-C549D6F7EF77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64020F90-A2A3-4B52-84BE-1F794AF0ACA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64020F90-A2A3-4B52-84BE-1F794AF0ACA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64020F90-A2A3-4B52-84BE-1F794AF0ACA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64020F90-A2A3-4B52-84BE-1F794AF0ACA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

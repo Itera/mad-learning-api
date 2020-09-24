@@ -1,20 +1,19 @@
-using MadLearning.API.Config;
-using MadLearning.API.Repositories;
+using MadLearning.API.Application;
+using MadLearning.API.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 namespace MadLearning.API
 {
-    public class Startup
+    internal sealed class Startup
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -22,31 +21,26 @@ namespace MadLearning.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<EventDbSettings>(
-                    Configuration.GetSection(nameof(EventDbSettings))
-                );
-
-            services.AddSingleton(sp =>
-                    sp.GetRequiredService<IOptions<EventDbSettings>>().Value
-                );
-
-            services.AddSingleton<IEventRepository, EventRepository>();
+            services
+                .AddApplication()
+                .AddInfrastructure(this.Configuration);
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(static c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MadLearning.API", Version = "v1" });
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Framework needs this")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MadLearning.API v1"));
+                app.UseSwaggerUI(static c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MadLearning.API v1"));
             }
 
             app.UseHttpsRedirection();
@@ -55,7 +49,7 @@ namespace MadLearning.API
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(static endpoints =>
             {
                 endpoints.MapControllers();
             });
