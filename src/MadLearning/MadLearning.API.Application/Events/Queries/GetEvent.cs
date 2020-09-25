@@ -1,4 +1,5 @@
 ﻿using MadLearning.API.Application.Dtos;
+using MadLearning.API.Application.Mapping;
 using MadLearning.API.Application.Persistence;
 using MediatR;
 using System;
@@ -17,7 +18,8 @@ namespace MadLearning.API.Application.Events.Queries
                 throw new ArgumentException("Null or whitespace Event ID");
 
             var dto = await this.repository.GetEvent(request.Id, cancellationToken);
-            return dto;
+
+            return dto.ToApiDto();
         }
     }
 }

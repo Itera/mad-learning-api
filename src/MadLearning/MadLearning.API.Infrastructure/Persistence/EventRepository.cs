@@ -23,7 +23,7 @@ namespace MadLearning.API.Infrastructure.Persistence
             this.collection = database.GetCollection<EventModelDbDto>(eventDbSettings.EventCollectionName);
         }
 
-        public async Task<GetEventModelApiDto?> GetEvent(string eventId, CancellationToken cancellationToken)
+        public async Task<EventModel?> GetEvent(string eventId, CancellationToken cancellationToken)
         {
             var cursor = await this.collection.FindAsync(e => e.Id == eventId, cancellationToken: cancellationToken);
 
@@ -32,10 +32,10 @@ namespace MadLearning.API.Infrastructure.Persistence
             if (@event is null)
                 return null;
 
-            return @event.ToEventModel().ToApiDto();
+            return @event.ToEventModel();
         }
 
-        public async Task<List<GetEventModelApiDto>> GetEvents(EventFilterApiDto eventFilter, CancellationToken cancellationToken)
+        public async Task<List<EventModel>> GetEvents(EventFilterApiDto eventFilter, CancellationToken cancellationToken)
         {
             var filter = CreateFilter(eventFilter);
 
@@ -44,7 +44,7 @@ namespace MadLearning.API.Infrastructure.Persistence
             var dtos = await events.ToListAsync(cancellationToken);
 
             return dtos
-                .Select(dto => dto.ToEventModel().ToApiDto())
+                .Select(dto => dto.ToEventModel())
                 .ToList();
 
             static FilterDefinition<EventModelDbDto> CreateFilter(EventFilterApiDto eventFilter)
@@ -56,39 +56,24 @@ namespace MadLearning.API.Infrastructure.Persistence
             }
         }
 
-        public async Task<GetEventModelApiDto> CreateEvent(CreateEventModelApiDto createEventModel, CancellationToken cancellationToken)
+        public async Task<EventModel> CreateEvent(EventModel eventModel, CancellationToken cancellationToken)
         {
-            var eventModel = EventModel.Create(
-                createEventModel.Name,
-                createEventModel.Description,
-                createEventModel.Time,
-                createEventModel.Owner.ToPersonModel(),
-                createEventModel.Participants.ToPersonModels());
-
             var dbDto = eventModel.ToDbDto();
             await this.collection.InsertOneAsync(dbDto, cancellationToken: cancellationToken);
 
             eventModel = dbDto.ToEventModel();
 
-            return eventModel.ToApiDto();
+            return eventModel;
         }
 
-        public async Task DeleteEvent(DeleteEventModelApiDto deleteEventModel, CancellationToken cancellationToken)
+        public async Task DeleteEvent(string id, CancellationToken cancellationToken)
         {
-            await this.collection.DeleteOneAsync(ev => ev.Id == deleteEventModel.Id, cancellationToken);
+            await this.collection.DeleteOneAsync(ev => ev.Id == id, cancellationToken);
         }
 
-        public async Task UpdateEvent(UpdateEventModelApiDto updateEventModel, CancellationToken cancellationToken)
+        public async Task UpdateEvent(EventModel eventModel, CancellationToken cancellationToken)
         {
-            var model = EventModel.Update(
-                updateEventModel.Id,
-                updateEventModel.Name,
-                updateEventModel.Description,
-                updateEventModel.Time,
-                updateEventModel.Owner.ToPersonModel(),
-                updateEventModel.Participants.ToPersonModels());
-
-            await this.collection.ReplaceOneAsync(ev => ev.Id == model.Id, model.ToDbDto(), cancellationToken: cancellationToken);
+            await this.collection.ReplaceOneAsync(ev => ev.Id == eventModel.Id, eventModel.ToDbDto(), cancellationToken: cancellationToken);
         }
     }
 }
