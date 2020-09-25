@@ -1,6 +1,6 @@
 ﻿using MadLearning.API.Application.Dtos;
+using MadLearning.API.Application.Events.Commands;
 using MadLearning.API.Application.Events.Queries;
-using MadLearning.API.Application.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading;
@@ -12,13 +12,6 @@ namespace MadLearning.API.Controllers
     [Route("api/[controller]")]
     public sealed class EventController : ApiControllerBase
     {
-        private readonly IEventRepository eventRepository;
-
-        public EventController(IEventRepository eventService)
-        {
-            this.eventRepository = eventService;
-        }
-
         [HttpGet("{eventId}")]
         public async Task<GetEventModelApiDto?> GetEvent(string eventId, CancellationToken cancellationToken)
         {
@@ -28,28 +21,25 @@ namespace MadLearning.API.Controllers
         [HttpGet]
         public async Task<List<GetEventModelApiDto>> GetEvents([FromQuery] EventFilterApiDto eventFilter, CancellationToken cancellationToken)
         {
-            var events = await this.eventRepository.GetEvents(eventFilter, cancellationToken);
-
-            return events;
+            return await this.Mediator.Send(new GetEvents(eventFilter), cancellationToken);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEvent([FromBody] CreateEventModelApiDto eventModel, CancellationToken cancellationToken)
+        public async Task<GetEventModelApiDto?> CreateEvent([FromBody] CreateEventModelApiDto eventModel, CancellationToken cancellationToken)
         {
-            var dto = await this.eventRepository.CreateEvent(eventModel, cancellationToken);
-            return this.CreatedAtAction(nameof(this.GetEvent), new { eventId = dto.Id }, dto);
+            return await this.Mediator.Send(new CreateEvent(eventModel), cancellationToken);
         }
 
         [HttpPut]
         public async Task UpdateEvent([FromBody] UpdateEventModelApiDto eventModel, CancellationToken cancellationToken)
         {
-            await this.eventRepository.UpdateEvent(eventModel, cancellationToken);
+            await this.Mediator.Send(new UpdateEvent(eventModel), cancellationToken);
         }
 
         [HttpDelete]
         public async Task DeleteEvent([FromBody] DeleteEventModelApiDto eventModel, CancellationToken cancellationToken)
         {
-            await this.eventRepository.DeleteEvent(eventModel, cancellationToken);
+            await this.Mediator.Send(new DeleteEvent(eventModel), cancellationToken);
         }
     }
 }
