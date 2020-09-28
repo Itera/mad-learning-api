@@ -15,15 +15,20 @@ namespace MadLearning.API.Application.HostedServices
     {
         private readonly IEventRepository eventRepository;
         private readonly IIdGenerator idGenerator;
+        private readonly IHostEnvironment hostEnvironment;
 
-        public SeedService(IEventRepository eventRepository, IIdGenerator idGenerator)
+        public SeedService(IEventRepository eventRepository, IIdGenerator idGenerator, IHostEnvironment hostEnvironment)
         {
             this.eventRepository = eventRepository;
             this.idGenerator = idGenerator;
+            this.hostEnvironment = hostEnvironment;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            if (!this.hostEnvironment.IsDevelopment())
+                return;
+
             var hasAnyEvent = (await this.eventRepository.GetEvents(new Dtos.EventFilterApiDto() { Limit = 1 }, cancellationToken)).Any();
             if (hasAnyEvent)
                 return;
