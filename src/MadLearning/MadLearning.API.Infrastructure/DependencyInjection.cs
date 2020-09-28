@@ -2,6 +2,7 @@
 using MadLearning.API.Application.Persistence;
 using MadLearning.API.Infrastructure.Configuration;
 using MadLearning.API.Infrastructure.Persistence;
+using MadLearning.API.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -28,6 +29,7 @@ namespace MadLearning.API.Infrastructure
             {
                 // Dependencies
                 services.AddSingleton<IEventRepository, EventRepository>();
+                services.AddSingleton<Application.Services.IIdGenerator, IdGenerator>();
             }
 
             {

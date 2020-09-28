@@ -39,7 +39,7 @@ namespace MadLearning.API.Infrastructure.Persistence
         {
             var filter = CreateFilter(eventFilter);
 
-            var events = await this.collection.FindAsync(filter, cancellationToken: cancellationToken);
+            var events = this.collection.Find(filter).Limit(eventFilter.Limit);
 
             var dtos = await events.ToListAsync(cancellationToken);
 
