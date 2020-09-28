@@ -259,3 +259,9 @@ dotnet_diagnostic.CA1724.severity = none
 
 # SA1009: Closing parenthesis should not be followed by a space
 dotnet_diagnostic.SA1009.severity = none
+
+# CA1056: Symbol with "Url" in name should be System.Uri type
+dotnet_diagnostic.CA1056.severity = none
+
+# CA1054: Symbol with "Url" in name should be System.Uri type
+dotnet_diagnostic.CA1054.severity = none

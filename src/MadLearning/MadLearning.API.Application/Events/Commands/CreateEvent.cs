@@ -18,8 +18,8 @@ namespace MadLearning.API.Application.Events.Commands
                     request.dto.Name,
                     request.dto.Description,
                     request.dto.Time,
-                    request.dto.Owner.ToPersonModel(),
-                    request.dto.Participants.ToPersonModels());
+                    request.dto.ImageUrl,
+                    request.dto.Owner.ToPersonModel()!);
 
             var createdEvent = await this.repository.CreateEvent(eventModel, cancellationToken);
 

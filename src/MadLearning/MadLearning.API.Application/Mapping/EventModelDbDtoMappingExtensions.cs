@@ -17,6 +17,7 @@ namespace MadLearning.API.Application.Mapping
                 Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
+                ImageUrl = model.ImageUrl,
                 Owner = model.Owner.ToDbDto(),
                 Participants = model.Participants.ToDbDtos()?.ToList() ?? new (),
                 Time = model.Time,
