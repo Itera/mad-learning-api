@@ -17,7 +17,8 @@ namespace MadLearning.API.Application.Events.Commands
             var eventModel = EventModel.Create(
                     request.dto.Name,
                     request.dto.Description,
-                    request.dto.Time,
+                    request.dto.StartTime,
+                    request.dto.EndTime,
                     request.dto.ImageUrl,
                     request.dto.ImageAlt,
                     request.dto.Location,
