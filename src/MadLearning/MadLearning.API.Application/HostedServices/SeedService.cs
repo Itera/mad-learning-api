@@ -38,8 +38,8 @@ namespace MadLearning.API.Application.HostedServices
                 ".NET 5",
                 "Let's create something in .NET with C# or F# and learn what's new in .NET 5",
                 DateTimeOffset.UtcNow.AddHours(6),
-                new PersonModel(this.idGenerator.Generate(), "Raymond", "Selvik", "raymond.selvik@itera.no"),
-                null),
+                null,
+                new PersonModel(this.idGenerator.Generate(), "Raymond", "Selvik", "raymond.selvik@itera.no")),
                 cancellationToken);
 
             await this.eventRepository.CreateEvent(
@@ -47,8 +47,8 @@ namespace MadLearning.API.Application.HostedServices
                 "React fagkveld",
                 "Intro to React for frontend developers",
                 DateTimeOffset.UtcNow.AddDays(1),
-                new PersonModel(this.idGenerator.Generate(), "Tin Anh", "Nguyen", "tin.anh.nguyen@itera.no"),
-                null),
+                null,
+                new PersonModel(this.idGenerator.Generate(), "Tin Anh", "Nguyen", "tin.anh.nguyen@itera.no")),
                 cancellationToken);
 
             await this.eventRepository.CreateEvent(
@@ -56,8 +56,8 @@ namespace MadLearning.API.Application.HostedServices
                 ".NET microservices",
                 "We will create .NET microservices using .NET 5, ASP.NET Core, Project Tye and Kubernetes",
                 DateTimeOffset.UtcNow.AddDays(3),
-                new PersonModel(this.idGenerator.Generate(), "Lars Erik", "Røise", "lars.erik.roise@itera.no"),
-                null),
+                null,
+                new PersonModel(this.idGenerator.Generate(), "Lars Erik", "Røise", "lars.erik.roise@itera.no")),
                 cancellationToken);
 
             await this.eventRepository.CreateEvent(
@@ -65,8 +65,8 @@ namespace MadLearning.API.Application.HostedServices
                 "Java microservices",
                 "Set up microservices using Java, Spring Boot and Kubernetes",
                 DateTimeOffset.UtcNow.AddDays(6),
-                new PersonModel(this.idGenerator.Generate(), "Klara", "Opdahl", "klara.opdahl@itera.no"),
-                null),
+                null,
+                new PersonModel(this.idGenerator.Generate(), "Klara", "Opdahl", "klara.opdahl@itera.no")),
                 cancellationToken);
 
             await this.eventRepository.CreateEvent(
@@ -74,8 +74,8 @@ namespace MadLearning.API.Application.HostedServices
                 "Fullstack F#",
                 "SAFE stack can be used to develop fullstack F# applications",
                 DateTimeOffset.UtcNow.AddDays(7),
-                new PersonModel(this.idGenerator.Generate(), "Øyvind", "Nedregård", "oyvind.nedregard@itera.no"),
-                null),
+                null,
+                new PersonModel(this.idGenerator.Generate(), "Øyvind", "Nedregård", "oyvind.nedregard@itera.no")),
                 cancellationToken);
 
             await this.eventRepository.CreateEvent(
@@ -83,8 +83,8 @@ namespace MadLearning.API.Application.HostedServices
                 "Multicloud with Pulumi",
                 "How to setup a multicloud environment with Pulumi IaC",
                 DateTimeOffset.UtcNow.AddDays(9),
-                new PersonModel(this.idGenerator.Generate(), "Martin", "Othamar", "martin.othamar@itera.no"),
-                null),
+                null,
+                new PersonModel(this.idGenerator.Generate(), "Martin", "Othamar", "martin.othamar@itera.no")),
                 cancellationToken);
         }
 
