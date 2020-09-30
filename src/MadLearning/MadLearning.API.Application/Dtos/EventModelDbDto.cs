@@ -13,6 +13,8 @@ namespace MadLearning.API.Application.Dtos
 
         public string? Description { get; set; }
 
+        public string? ImageUrl { get; set; }
+
         public PersonModelDbDto? Owner { get; set; }
 
         public List<PersonModelDbDto> Participants { get; init; } = new List<PersonModelDbDto>();

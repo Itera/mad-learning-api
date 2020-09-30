@@ -23,6 +23,7 @@ namespace MadLearning.API.Application.Mapping
                 dto.Name,
                 dto.Description,
                 dto.Time,
+                dto.ImageUrl,
                 dto.Owner.ToPersonModel(),
                 dto.Participants.Select(d => d.ToPersonModel()));
         }
