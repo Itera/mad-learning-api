@@ -19,6 +19,9 @@ namespace MadLearning.API.Application.Events.Queries
 
             var dto = await this.repository.GetEvent(request.Id, cancellationToken);
 
+            if (dto is null)
+                return null;
+
             return dto.ToApiDto();
         }
     }

@@ -3,9 +3,7 @@ using MadLearning.API.Application.Services;
 using MadLearning.API.Domain.Entities;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,12 +31,18 @@ namespace MadLearning.API.Application.HostedServices
             if (hasAnyEvent)
                 return;
 
+            var imageUrl = "https://itera-cdn.azureedge.net/contentassets/df1f34b7803045fa95ffd4529826f2b2/kristian-redi-2.jpg?quality=60&Cache=Always&width=1148&mode=crop&scale=both";
+            var imageAlt = "Picture of programmers";
+            var location = "Jernlageret";
+
             await this.eventRepository.CreateEvent(
                 EventModel.Create(
                 ".NET 5",
                 "Let's create something in .NET with C# or F# and learn what's new in .NET 5",
                 DateTimeOffset.UtcNow.AddHours(6),
-                null,
+                imageUrl,
+                imageAlt,
+                location,
                 new PersonModel(this.idGenerator.Generate(), "Raymond", "Selvik", "raymond.selvik@itera.no")),
                 cancellationToken);
 
@@ -47,7 +51,9 @@ namespace MadLearning.API.Application.HostedServices
                 "React fagkveld",
                 "Intro to React for frontend developers",
                 DateTimeOffset.UtcNow.AddDays(1),
-                null,
+                imageUrl,
+                imageAlt,
+                location,
                 new PersonModel(this.idGenerator.Generate(), "Tin Anh", "Nguyen", "tin.anh.nguyen@itera.no")),
                 cancellationToken);
 
@@ -56,7 +62,9 @@ namespace MadLearning.API.Application.HostedServices
                 ".NET microservices",
                 "We will create .NET microservices using .NET 5, ASP.NET Core, Project Tye and Kubernetes",
                 DateTimeOffset.UtcNow.AddDays(3),
-                null,
+                imageUrl,
+                imageAlt,
+                location,
                 new PersonModel(this.idGenerator.Generate(), "Lars Erik", "Røise", "lars.erik.roise@itera.no")),
                 cancellationToken);
 
@@ -65,7 +73,9 @@ namespace MadLearning.API.Application.HostedServices
                 "Java microservices",
                 "Set up microservices using Java, Spring Boot and Kubernetes",
                 DateTimeOffset.UtcNow.AddDays(6),
-                null,
+                imageUrl,
+                imageAlt,
+                location,
                 new PersonModel(this.idGenerator.Generate(), "Klara", "Opdahl", "klara.opdahl@itera.no")),
                 cancellationToken);
 
@@ -74,7 +84,9 @@ namespace MadLearning.API.Application.HostedServices
                 "Fullstack F#",
                 "SAFE stack can be used to develop fullstack F# applications",
                 DateTimeOffset.UtcNow.AddDays(7),
-                null,
+                imageUrl,
+                imageAlt,
+                location,
                 new PersonModel(this.idGenerator.Generate(), "Øyvind", "Nedregård", "oyvind.nedregard@itera.no")),
                 cancellationToken);
 
@@ -83,7 +95,9 @@ namespace MadLearning.API.Application.HostedServices
                 "Multicloud with Pulumi",
                 "How to setup a multicloud environment with Pulumi IaC",
                 DateTimeOffset.UtcNow.AddDays(9),
-                null,
+                imageUrl,
+                imageAlt,
+                location,
                 new PersonModel(this.idGenerator.Generate(), "Martin", "Othamar", "martin.othamar@itera.no")),
                 cancellationToken);
         }
