@@ -15,7 +15,9 @@ namespace MadLearning.API.Infrastructure.Persistence
             [BsonRepresentation(BsonType.ObjectId)]
             public string? Id { get; init; }
 
-            public DateTimeOffset Time { get; set; }
+            public DateTimeOffset StartTime { get; set; }
+
+            public DateTimeOffset EndTime { get; set; }
 
             public string? Name { get; set; }
 
@@ -44,7 +46,8 @@ namespace MadLearning.API.Infrastructure.Persistence
                     this.Id,
                     this.Name,
                     this.Description,
-                    this.Time,
+                    this.StartTime,
+                    this.EndTime,
                     this.ImageUrl,
                     this.ImageAlt,
                     this.Location,
@@ -71,7 +74,8 @@ namespace MadLearning.API.Infrastructure.Persistence
                 Location = model.Location,
                 Owner = model.Owner.ToDbDto(),
                 Participants = model.Participants.ToDbDtos()?.ToList() ?? new (),
-                Time = model.Time,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
             };
         }
     }

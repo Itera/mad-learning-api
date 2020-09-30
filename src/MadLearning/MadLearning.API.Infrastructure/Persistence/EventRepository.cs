@@ -49,8 +49,8 @@ namespace MadLearning.API.Infrastructure.Persistence
 
             static FilterDefinition<EventModelDbDto> CreateFilter(EventFilterApiDto eventFilter)
             {
-                var filter1 = Builders<EventModelDbDto>.Filter.Lte(nameof(EventModelDbDto.Time), eventFilter.To);
-                var filter2 = Builders<EventModelDbDto>.Filter.Gte(nameof(EventModelDbDto.Time), eventFilter.From);
+                var filter1 = Builders<EventModelDbDto>.Filter.Lte(nameof(EventModelDbDto.StartTime), eventFilter.To);
+                var filter2 = Builders<EventModelDbDto>.Filter.Gte(nameof(EventModelDbDto.StartTime), eventFilter.From);
 
                 return Builders<EventModelDbDto>.Filter.And(filter1, filter2);
             }

@@ -15,15 +15,16 @@ namespace MadLearning.API.Application.Events.Commands
         public async Task<Unit> Handle(UpdateEvent request, CancellationToken cancellationToken)
         {
             var eventModel = EventModel.Update(
-               request.dto.Id,
-               request.dto.Name,
-               request.dto.Description,
-               request.dto.Time,
-               request.dto.ImageUrl,
-               request.dto.ImageAlt,
-               request.dto.Location,
-               request.dto.Owner.ToPersonModel(),
-               request.dto.Participants.ToPersonModels());
+                request.dto.Id,
+                request.dto.Name,
+                request.dto.Description,
+                request.dto.StartTime,
+                request.dto.EndTime,
+                request.dto.ImageUrl,
+                request.dto.ImageAlt,
+                request.dto.Location,
+                request.dto.Owner.ToPersonModel(),
+                request.dto.Participants.ToPersonModels());
 
             await this.repository.UpdateEvent(eventModel, cancellationToken);
 

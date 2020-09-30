@@ -10,7 +10,8 @@ namespace MadLearning.API.Domain.Entities
             string id,
             string name,
             string description,
-            DateTimeOffset time,
+            DateTimeOffset startTime,
+            DateTimeOffset endTime,
             string? imageUrl,
             string? imageAlt,
             string? location,
@@ -20,7 +21,8 @@ namespace MadLearning.API.Domain.Entities
             this.Id = id ?? throw new InvalidOperationException("Event can only be created from valid DB dto");
             this.Name = name ?? throw new InvalidOperationException("Event can only be created from valid DB dto");
             this.Description = description ?? throw new InvalidOperationException("Event can only be created from valid DB dto");
-            this.Time = time;
+            this.StartTime = startTime;
+            this.EndTime = endTime;
             this.ImageUrl = imageUrl;
             this.ImageAlt = imageAlt;
             this.Location = location;
@@ -31,7 +33,8 @@ namespace MadLearning.API.Domain.Entities
         public EventModel(
             string name,
             string description,
-            DateTimeOffset time,
+            DateTimeOffset startTime,
+            DateTimeOffset endTime,
             string? imageUrl,
             string? imageAlt,
             string? location,
@@ -41,7 +44,8 @@ namespace MadLearning.API.Domain.Entities
             this.Id = string.Empty;
             this.Name = name;
             this.Description = description;
-            this.Time = time;
+            this.StartTime = startTime;
+            this.EndTime = endTime;
             this.ImageUrl = imageUrl;
             this.ImageAlt = imageAlt;
             this.Location = location;
@@ -51,7 +55,9 @@ namespace MadLearning.API.Domain.Entities
 
         public string Id { get; }
 
-        public DateTimeOffset Time { get; set;  }
+        public DateTimeOffset StartTime { get; set;  }
+
+        public DateTimeOffset EndTime { get; set;  }
 
         public string Name { get; init; }
 
@@ -70,7 +76,8 @@ namespace MadLearning.API.Domain.Entities
         public static EventModel Create(
             string name,
             string description,
-            DateTimeOffset time,
+            DateTimeOffset startTime,
+            DateTimeOffset endTime,
             string? imageUrl,
             string? imageAlt,
             string? location,
@@ -81,7 +88,7 @@ namespace MadLearning.API.Domain.Entities
             if (string.IsNullOrWhiteSpace(description))
                 throw new ArgumentException("Event description is null or whitespace");
 
-            var @event = new EventModel(name, description, time, imageUrl, imageAlt, location, owner, null);
+            var @event = new EventModel(name, description, startTime, endTime, imageUrl, imageAlt, location, owner, null);
 
             return @event;
         }
@@ -90,7 +97,8 @@ namespace MadLearning.API.Domain.Entities
             string id,
             string name,
             string description,
-            DateTimeOffset time,
+            DateTimeOffset startTime,
+            DateTimeOffset endTime,
             string? imageUrl,
             string? imageAlt,
             string? location,
@@ -104,7 +112,7 @@ namespace MadLearning.API.Domain.Entities
             if (string.IsNullOrWhiteSpace(description))
                 throw new ArgumentException("Event description is null or whitespace");
 
-            var @event = new EventModel(id, name, description, time, imageUrl, imageAlt, location, owner, participants);
+            var @event = new EventModel(id, name, description, startTime, endTime, imageUrl, imageAlt, location, owner, participants);
 
             return @event;
         }
