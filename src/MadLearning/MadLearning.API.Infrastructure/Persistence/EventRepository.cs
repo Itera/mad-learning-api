@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MadLearning.API.Infrastructure.Persistence
 {
-    internal sealed class EventRepository : IEventRepository
+    internal sealed partial class EventRepository : IEventRepository
     {
         private readonly IMongoCollection<EventModelDbDto> collection;
 

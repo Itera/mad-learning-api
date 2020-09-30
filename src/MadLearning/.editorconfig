@@ -265,3 +265,12 @@ dotnet_diagnostic.CA1056.severity = none
 
 # CA1054: Symbol with "Url" in name should be System.Uri type
 dotnet_diagnostic.CA1054.severity = none
+
+# SA1601: Partial elements should be documented
+dotnet_diagnostic.SA1601.severity = none
+
+# SA1204: Static member should appear before non-static members
+dotnet_diagnostic.SA1204.severity = none
+
+# SA1402: File may only contain a single type
+dotnet_diagnostic.SA1402.severity = none
