@@ -20,6 +20,8 @@ namespace MadLearning.API.Application.Events.Commands
                request.dto.Description,
                request.dto.Time,
                request.dto.ImageUrl,
+               request.dto.ImageAlt,
+               request.dto.Location,
                request.dto.Owner.ToPersonModel(),
                request.dto.Participants.ToPersonModels());
 

@@ -23,6 +23,10 @@ namespace MadLearning.API.Infrastructure.Persistence
 
             public string? ImageUrl { get; set; }
 
+            public string? ImageAlt { get; set; }
+
+            public string? Location { get; set; }
+
             public PersonModelDbDto? Owner { get; set; }
 
             public List<PersonModelDbDto> Participants { get; init; } = new List<PersonModelDbDto>();
@@ -42,6 +46,8 @@ namespace MadLearning.API.Infrastructure.Persistence
                     this.Description,
                     this.Time,
                     this.ImageUrl,
+                    this.ImageAlt,
+                    this.Location,
                     this.Owner?.ToPersonModel(),
                     this.Participants.Select(d => d.ToPersonModel()));
             }
@@ -61,6 +67,8 @@ namespace MadLearning.API.Infrastructure.Persistence
                 Name = model.Name,
                 Description = model.Description,
                 ImageUrl = model.ImageUrl,
+                ImageAlt = model.ImageAlt,
+                Location = model.Location,
                 Owner = model.Owner.ToDbDto(),
                 Participants = model.Participants.ToDbDtos()?.ToList() ?? new (),
                 Time = model.Time,
