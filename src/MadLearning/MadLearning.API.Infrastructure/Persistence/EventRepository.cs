@@ -4,6 +4,7 @@ using MadLearning.API.Application.Persistence;
 using MadLearning.API.Domain.Entities;
 using MadLearning.API.Infrastructure.Configuration;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -58,12 +59,23 @@ namespace MadLearning.API.Infrastructure.Persistence
 
         public async Task<EventModel> CreateEvent(EventModel eventModel, CancellationToken cancellationToken)
         {
-            var dbDto = eventModel.ToDbDto();
-            await this.collection.InsertOneAsync(dbDto, cancellationToken: cancellationToken);
+            try
+            {
+                var dbDto = eventModel.ToDbDto();
+                await this.collection.InsertOneAsync(dbDto, cancellationToken: cancellationToken);
 
-            eventModel = dbDto.ToEventModel();
+                eventModel = dbDto.ToEventModel();
 
-            return eventModel;
+                return eventModel;
+            }
+            catch (TimeoutException e)
+            {
+                throw new StorageException(e.Message, e);
+            }
+            catch (MongoException e)
+            {
+                throw new StorageException(e.Message, e);
+            }
         }
 
         public async Task DeleteEvent(string id, CancellationToken cancellationToken)

@@ -1,7 +1,11 @@
 ﻿using MadLearning.API.Application.Dtos;
+using MadLearning.API.Application.Events;
 using MadLearning.API.Application.Events.Commands;
 using MadLearning.API.Application.Events.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Web.Resource;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,9 +13,17 @@ using System.Threading.Tasks;
 namespace MadLearning.API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public sealed class EventController : ApiControllerBase
     {
+        private IConfiguration configuration;
+
+        public EventController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
         [HttpGet("{eventId}")]
         public async Task<GetEventModelApiDto?> GetEvent(string eventId, CancellationToken cancellationToken)
         {
@@ -27,7 +39,18 @@ namespace MadLearning.API.Controllers
         [HttpPost]
         public async Task<GetEventModelApiDto?> CreateEvent([FromBody] CreateEventModelApiDto eventModel, CancellationToken cancellationToken)
         {
-            return await this.Mediator.Send(new CreateEvent(eventModel), cancellationToken);
+            this.HttpContext.VerifyUserHasAnyAcceptedScope(this.configuration["ApiScope"]);
+
+            try
+            {
+                var createdEvent = await this.Mediator.Send(new CreateEvent(eventModel), cancellationToken);
+
+                return createdEvent;
+            }
+            catch (EventException)
+            {
+                throw;
+            }
         }
 
         [HttpPut]
