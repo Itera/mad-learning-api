@@ -41,16 +41,7 @@ namespace MadLearning.API.Controllers
         {
             this.HttpContext.VerifyUserHasAnyAcceptedScope(this.configuration["ApiScope"]);
 
-            try
-            {
-                var createdEvent = await this.Mediator.Send(new CreateEvent(eventModel), cancellationToken);
-
-                return createdEvent;
-            }
-            catch (EventException)
-            {
-                throw;
-            }
+            return await this.Mediator.Send(new CreateEvent(eventModel), cancellationToken);
         }
 
         [HttpPut]

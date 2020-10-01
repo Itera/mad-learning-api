@@ -26,9 +26,16 @@ namespace MadLearning.API.Application.Events.Commands
                 request.dto.Owner.ToPersonModel(),
                 request.dto.Participants.ToPersonModels());
 
-            await this.repository.UpdateEvent(eventModel, cancellationToken);
+            try
+            {
+                await this.repository.UpdateEvent(eventModel, cancellationToken);
 
-            return Unit.Value;
+                return Unit.Value;
+            }
+            catch (StorageException e)
+            {
+                throw new EventException(e.Message, e);
+            }
         }
     }
 }
