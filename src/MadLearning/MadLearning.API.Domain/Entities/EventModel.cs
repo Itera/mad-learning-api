@@ -15,6 +15,7 @@ namespace MadLearning.API.Domain.Entities
             string? imageUrl,
             string? imageAlt,
             string? location,
+            string? eventType,
             PersonModel? owner,
             IEnumerable<PersonModel>? participants)
         {
@@ -26,6 +27,7 @@ namespace MadLearning.API.Domain.Entities
             this.ImageUrl = imageUrl;
             this.ImageAlt = imageAlt;
             this.Location = location;
+            this.EventType = eventType;
             this.Owner = owner;
             this.Participants = participants?.ToList() ?? new ();
         }
@@ -38,6 +40,7 @@ namespace MadLearning.API.Domain.Entities
             string? imageUrl,
             string? imageAlt,
             string? location,
+            string? eventType,
             PersonModel? owner,
             IEnumerable<PersonModel>? participants)
         {
@@ -49,6 +52,7 @@ namespace MadLearning.API.Domain.Entities
             this.ImageUrl = imageUrl;
             this.ImageAlt = imageAlt;
             this.Location = location;
+            this.EventType = eventType;
             this.Owner = owner;
             this.Participants = participants?.ToList() ?? new ();
         }
@@ -69,6 +73,8 @@ namespace MadLearning.API.Domain.Entities
 
         public string? Location { get; init; }
 
+        public string? EventType { get; init; }
+
         public PersonModel? Owner { get; set; }
 
         public List<PersonModel> Participants { get; init; } = new List<PersonModel>();
@@ -81,6 +87,7 @@ namespace MadLearning.API.Domain.Entities
             string? imageUrl,
             string? imageAlt,
             string? location,
+            string? eventType,
             PersonModel owner)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -88,7 +95,7 @@ namespace MadLearning.API.Domain.Entities
             if (string.IsNullOrWhiteSpace(description))
                 throw new ArgumentException("Event description is null or whitespace");
 
-            var @event = new EventModel(name, description, startTime, endTime, imageUrl, imageAlt, location, owner, null);
+            var @event = new EventModel(name, description, startTime, endTime, imageUrl, imageAlt, location, eventType, owner, null);
 
             return @event;
         }
@@ -102,6 +109,7 @@ namespace MadLearning.API.Domain.Entities
             string? imageUrl,
             string? imageAlt,
             string? location,
+            string? eventType,
             PersonModel? owner,
             IEnumerable<PersonModel>? participants)
         {
@@ -112,7 +120,7 @@ namespace MadLearning.API.Domain.Entities
             if (string.IsNullOrWhiteSpace(description))
                 throw new ArgumentException("Event description is null or whitespace");
 
-            var @event = new EventModel(id, name, description, startTime, endTime, imageUrl, imageAlt, location, owner, participants);
+            var @event = new EventModel(id, name, description, startTime, endTime, imageUrl, imageAlt, location, eventType, owner, participants);
 
             return @event;
         }

@@ -29,6 +29,8 @@ namespace MadLearning.API.Infrastructure.Persistence
 
             public string? Location { get; set; }
 
+            public string? EventType { get; set; }
+
             public PersonModelDbDto? Owner { get; set; }
 
             public List<PersonModelDbDto> Participants { get; init; } = new List<PersonModelDbDto>();
@@ -51,6 +53,7 @@ namespace MadLearning.API.Infrastructure.Persistence
                     this.ImageUrl,
                     this.ImageAlt,
                     this.Location,
+                    this.EventType,
                     this.Owner?.ToPersonModel(),
                     this.Participants.Select(d => d.ToPersonModel()));
             }
@@ -72,6 +75,7 @@ namespace MadLearning.API.Infrastructure.Persistence
                 ImageUrl = model.ImageUrl,
                 ImageAlt = model.ImageAlt,
                 Location = model.Location,
+                EventType = model.EventType,
                 Owner = model.Owner.ToDbDto(),
                 Participants = model.Participants.ToDbDtos()?.ToList() ?? new (),
                 StartTime = model.StartTime,
