@@ -29,7 +29,7 @@ namespace MadLearning.API.Infrastructure.Persistence
 
             public string? Location { get; set; }
 
-            public string? EventType { get; set; }
+            public EventType EventType { get; set; }
 
             public PersonModelDbDto? Owner { get; set; }
 

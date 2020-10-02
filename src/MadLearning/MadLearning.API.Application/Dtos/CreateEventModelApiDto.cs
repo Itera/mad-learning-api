@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MadLearning.API.Domain.Entities;
+using System;
 
 namespace MadLearning.API.Application.Dtos
 {
@@ -10,6 +11,6 @@ namespace MadLearning.API.Application.Dtos
         string? ImageUrl,
         string? ImageAlt,
         string? Location,
-        string? EventType,
+        EventType EventType,
         PersonModelApiDto Owner);
 }

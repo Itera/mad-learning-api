@@ -15,7 +15,7 @@ namespace MadLearning.API.Domain.Entities
             string? imageUrl,
             string? imageAlt,
             string? location,
-            string? eventType,
+            EventType eventType,
             PersonModel? owner,
             IEnumerable<PersonModel>? participants)
         {
@@ -40,7 +40,7 @@ namespace MadLearning.API.Domain.Entities
             string? imageUrl,
             string? imageAlt,
             string? location,
-            string? eventType,
+            EventType eventType,
             PersonModel? owner,
             IEnumerable<PersonModel>? participants)
         {
@@ -73,7 +73,7 @@ namespace MadLearning.API.Domain.Entities
 
         public string? Location { get; init; }
 
-        public string? EventType { get; init; }
+        public EventType EventType { get; init; }
 
         public PersonModel? Owner { get; set; }
 
@@ -87,7 +87,7 @@ namespace MadLearning.API.Domain.Entities
             string? imageUrl,
             string? imageAlt,
             string? location,
-            string? eventType,
+            EventType eventType,
             PersonModel owner)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -109,7 +109,7 @@ namespace MadLearning.API.Domain.Entities
             string? imageUrl,
             string? imageAlt,
             string? location,
-            string? eventType,
+            EventType eventType,
             PersonModel? owner,
             IEnumerable<PersonModel>? participants)
         {
