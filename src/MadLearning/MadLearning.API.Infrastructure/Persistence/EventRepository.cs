@@ -1,9 +1,9 @@
 ﻿using MadLearning.API.Application.Dtos;
-using MadLearning.API.Application.Mapping;
 using MadLearning.API.Application.Persistence;
 using MadLearning.API.Domain.Entities;
 using MadLearning.API.Infrastructure.Configuration;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -15,9 +15,8 @@ namespace MadLearning.API.Infrastructure.Persistence
     {
         private readonly IMongoCollection<EventModelDbDto> collection;
 
-        public EventRepository(EventDbSettings eventDbSettings)
+        public EventRepository(EventDbSettings eventDbSettings, MongoClient client)
         {
-            var client = new MongoClient(eventDbSettings.ConnectionString);
             var database = client.GetDatabase(eventDbSettings.DatabaseName);
 
             this.collection = database.GetCollection<EventModelDbDto>(eventDbSettings.EventCollectionName);
@@ -39,7 +38,7 @@ namespace MadLearning.API.Infrastructure.Persistence
         {
             var filter = CreateFilter(eventFilter);
 
-            var events = this.collection.Find(filter).Limit(eventFilter.Limit);
+            var events = this.collection.Find(filter).SortBy(e => e.StartTime).Limit(eventFilter.Limit);
 
             var dtos = await events.ToListAsync(cancellationToken);
 
