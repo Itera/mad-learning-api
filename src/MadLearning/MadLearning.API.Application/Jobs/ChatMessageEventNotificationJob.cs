@@ -1,4 +1,5 @@
 ﻿using MadLearning.API.Application.Dtos;
+using MadLearning.API.Application.Extensions;
 using MadLearning.API.Application.Persistence;
 using MadLearning.API.Application.Services;
 using System;
@@ -25,10 +26,7 @@ namespace MadLearning.API.Application.Jobs
             var cancellationToken = cts.Token;
 
             var tomorrow = DateTimeOffset.UtcNow.AddDays(1);
-            var startOfTomorrow = tomorrow
-                .AddSeconds(-tomorrow.Second)
-                .AddMinutes(-tomorrow.Minute)
-                .AddHours(-tomorrow.Hour);
+            var startOfTomorrow = tomorrow.TruncateTime();
 
             var filter = new EventFilterApiDto
             {
