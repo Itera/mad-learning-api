@@ -22,6 +22,11 @@ namespace MadLearning.API.Application.HostedServices
             this.hostEnvironment = hostEnvironment;
         }
 
+        public static DateTimeOffset FloorMinutes(DateTimeOffset dt)
+        {
+            return new DateTimeOffset(dt.Year, dt.Month, dt.Day, dt.Hour, 0, 0, dt.Offset);
+        }
+
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             if (!this.hostEnvironment.IsDevelopment())
@@ -39,8 +44,8 @@ namespace MadLearning.API.Application.HostedServices
                 EventModel.Create(
                 ".NET 5",
                 "Let's create something in .NET with C# or F# and learn what's new in .NET 5",
-                DateTimeOffset.UtcNow.AddHours(6),
-                DateTimeOffset.UtcNow.AddHours(7),
+                FloorMinutes(DateTimeOffset.UtcNow.AddHours(6)),
+                FloorMinutes(DateTimeOffset.UtcNow.AddHours(7)),
                 imageUrl,
                 imageAlt,
                 location,
@@ -51,8 +56,8 @@ namespace MadLearning.API.Application.HostedServices
                 EventModel.Create(
                 "React fagkveld",
                 "Intro to React for frontend developers",
-                DateTimeOffset.UtcNow.AddDays(1),
-                DateTimeOffset.UtcNow.AddDays(1).AddHours(2),
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(1)),
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(1).AddHours(2)),
                 imageUrl,
                 imageAlt,
                 location,
@@ -61,10 +66,34 @@ namespace MadLearning.API.Application.HostedServices
 
             await this.eventRepository.CreateEvent(
                 EventModel.Create(
+                "Vue fagkveld",
+                "Intro to Vue for frontend developers",
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(1).AddHours(2)),
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(1).AddHours(3)),
+                imageUrl,
+                imageAlt,
+                location,
+                new PersonModel(this.idGenerator.Generate(), "Tin Anh", "Nguyen", "tin.anh.nguyen@itera.no")),
+                cancellationToken);
+
+            await this.eventRepository.CreateEvent(
+                EventModel.Create(
+                "Microsoft Orleans",
+                "Intro to stateful processing with virtual actors",
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(1).AddHours(4)),
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(1).AddHours(5)),
+                imageUrl,
+                imageAlt,
+                location,
+                new PersonModel(this.idGenerator.Generate(), "Martin", "Othamar", "martin.othamar@itera.no")),
+                cancellationToken);
+
+            await this.eventRepository.CreateEvent(
+                EventModel.Create(
                 ".NET microservices",
                 "We will create .NET microservices using .NET 5, ASP.NET Core, Project Tye and Kubernetes",
-                DateTimeOffset.UtcNow.AddDays(3),
-                DateTimeOffset.UtcNow.AddDays(3).AddHours(2),
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(3)),
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(3).AddHours(2)),
                 imageUrl,
                 imageAlt,
                 location,
@@ -75,8 +104,8 @@ namespace MadLearning.API.Application.HostedServices
                 EventModel.Create(
                 "Java microservices",
                 "Set up microservices using Java, Spring Boot and Kubernetes",
-                DateTimeOffset.UtcNow.AddDays(6),
-                DateTimeOffset.UtcNow.AddDays(6).AddHours(2),
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(6)),
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(6).AddHours(2)),
                 imageUrl,
                 imageAlt,
                 location,
@@ -87,8 +116,8 @@ namespace MadLearning.API.Application.HostedServices
                 EventModel.Create(
                 "Fullstack F#",
                 "SAFE stack can be used to develop fullstack F# applications",
-                DateTimeOffset.UtcNow.AddDays(7),
-                DateTimeOffset.UtcNow.AddDays(7).AddHours(2),
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(7)),
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(7).AddHours(2)),
                 imageUrl,
                 imageAlt,
                 location,
@@ -99,8 +128,8 @@ namespace MadLearning.API.Application.HostedServices
                 EventModel.Create(
                 "Multicloud with Pulumi",
                 "How to setup a multicloud environment with Pulumi IaC",
-                DateTimeOffset.UtcNow.AddDays(9),
-                DateTimeOffset.UtcNow.AddDays(9).AddHours(2),
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(9)),
+                FloorMinutes(DateTimeOffset.UtcNow.AddDays(9).AddHours(2)),
                 imageUrl,
                 imageAlt,
                 location,
