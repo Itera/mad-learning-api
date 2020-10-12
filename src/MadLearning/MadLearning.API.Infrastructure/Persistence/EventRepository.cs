@@ -44,6 +44,7 @@ namespace MadLearning.API.Infrastructure.Persistence
 
             return dtos
                 .Select(dto => dto.ToEventModel())
+                .OrderBy(em => em.StartTime)
                 .ToList();
 
             static FilterDefinition<EventModelDbDto> CreateFilter(EventFilterApiDto eventFilter)
