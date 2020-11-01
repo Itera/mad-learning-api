@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  pull_request
+
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    env:
+        PROJECT_PATH: src/MadLearning/MadLearning.API/MadLearning.API.csproj
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v1
+    - run: dotnet restore ${{ env.PROJECT_PATH }}
+    - run: dotnet build -c Release --no-restore ${{ env.PROJECT_PATH }}
+    - run: dotnet test --no-restore -v normal ${{ env.PROJECT_PATH }}
