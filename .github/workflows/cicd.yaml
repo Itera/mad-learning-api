@@ -1,0 +1,56 @@
+name: CI/CD Production
+
+on:
+  push:
+    branches:
+        - master
+
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    env:
+        PROJECT_PATH: src/MadLearning/MadLearning.API/MadLearning.API.csproj
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v1
+    - run: dotnet restore ${{ env.PROJECT_PATH }}
+    - run: dotnet build -c Release --no-restore ${{ env.PROJECT_PATH }}
+    - run: dotnet test --no-restore -v normal ${{ env.PROJECT_PATH }}
+  build-and-publish:
+    name: Build and publish Docker image
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: mad-learning-api
+      REGISTRY_NAME: itemadacr.azurecr.io
+      NAMESPACE: production-mad-learning
+    steps:
+      - uses: actions/checkout@master
+      # Connect to Azure Container registry (ACR)
+      - uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.REGISTRY_NAME }}
+          username: ${{ secrets.MAD_DOCKER_PUSH_USERNAME }}
+          password: ${{ secrets.MAD_DOCKER_PUSH_PASSWORD }}
+      # Container build and push to a Azure Container registry (ACR)
+      - run: |
+          docker build ./src/MadLearning/MadLearning.API/ -t ${{ env.REGISTRY_NAME }}/${{ env.APP_NAME }}:${{ github.sha }} -t ${{ env.REGISTRY_NAME }}/${{ env. APP_NAME }}:latest
+          docker push ${{ env.REGISTRY_NAME }}/${{ env.APP_NAME }}
+      # Set the target Azure Kubernetes Service (AKS) cluster. 
+      - uses: azure/k8s-set-context@v1
+        with:
+          method: service-account
+          k8s-url: ${{ secrets.MAD_K8S_URL }}
+          k8s-secret: ${{ secrets.MAD_K8S_CI_SECRET }}
+        id: setcontext
+      # Deploy app to AKS
+      - uses: azure/k8s-deploy@v1
+        with:
+          manifests: |
+            infrastructure/kubernetes/deployment.yaml
+            infrastructure/kubernetes/service.yaml
+            infrastructure/kubernetes/mongodb/mongodb-deployment.yaml
+            infrastructure/kubernetes/mongodb/mongodb-service.yaml
+          images: ${{ env.REGISTRY_NAME }}/${{ env.APP_NAME }}:latest
+          namespace: ${{ env.NAMESPACE }} 
