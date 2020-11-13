@@ -1,4 +1,5 @@
 ﻿using MadLearning.API.Application.Persistence;
+using MadLearning.API.Application.Service;
 using MadLearning.API.Infrastructure.Configuration;
 using MadLearning.API.Infrastructure.Persistence;
 using MadLearning.API.Infrastructure.Services;
@@ -23,8 +24,9 @@ namespace MadLearning.API.Infrastructure
 
             {
                 // Dependencies
-                services.AddSingleton<IEventRepository, EventRepository>();
-                services.AddSingleton<Application.Services.IIdGenerator, IdGenerator>();
+                services.AddTransient<IEventRepository, EventRepository>();
+                services.AddTransient<Application.Services.IIdGenerator, IdGenerator>();
+                services.AddTransient<ICalendarService, CalendarService>();
             }
 
             return services;

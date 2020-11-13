@@ -1,10 +1,10 @@
 ﻿using MadLearning.API.Application.Dtos;
-using MadLearning.API.Application.Events;
 using MadLearning.API.Application.Events.Commands;
 using MadLearning.API.Application.Events.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
 using System.Collections.Generic;
 using System.Threading;
@@ -17,11 +17,13 @@ namespace MadLearning.API.Controllers
     [Route("api/[controller]")]
     public sealed class EventController : ApiControllerBase
     {
+        private readonly ITokenAcquisition tokenAcquisition;
         private IConfiguration configuration;
 
-        public EventController(IConfiguration configuration)
+        public EventController(IConfiguration configuration, ITokenAcquisition tokenAcquisition)
         {
             this.configuration = configuration;
+            this.tokenAcquisition = tokenAcquisition;
         }
 
         [HttpGet("{eventId}")]

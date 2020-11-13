@@ -7,7 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
 
 namespace MadLearning.API
 {
@@ -28,7 +30,6 @@ namespace MadLearning.API
                 .EnableTokenAcquisitionToCallDownstreamApi()
                 .AddMicrosoftGraph(this.Configuration.GetSection("GraphApi"))
                 .AddInMemoryTokenCaches();
-
             services.AddLogging();
 
             services.AddCors(options =>

@@ -26,7 +26,7 @@ namespace MadLearning.API.Application.Events.Queries
 
                 return dto.ToApiDto();
             }
-            catch(StorageException e)
+            catch (StorageException e)
             {
                 throw new EventException(e.Message, e);
             }

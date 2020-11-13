@@ -12,7 +12,7 @@ namespace MadLearning.API.Application.Events.Commands
 {
     public sealed record CreateEvent(CreateEventModelApiDto dto) : IRequest<GetEventModelApiDto?>;
 
-    internal sealed record CreateEventCommandHandler(IEventRepository repository, ICalendarService calendarService, ILogger logger) : IRequestHandler<CreateEvent, GetEventModelApiDto?>
+    internal sealed record CreateEventCommandHandler(IEventRepository repository, ICalendarService calendarService) : IRequestHandler<CreateEvent, GetEventModelApiDto?>
     {
         public async Task<GetEventModelApiDto?> Handle(CreateEvent request, CancellationToken cancellationToken)
         {
@@ -36,13 +36,13 @@ namespace MadLearning.API.Application.Events.Commands
             }
             catch (StorageException e)
             {
-                this.logger.LogError("Could not create Event");
+                //this.logger.LogError("Could not create Event");
 
                 throw new EventException(e.Message, e);
             }
             catch (CalendarException e)
             {
-                this.logger.LogError("Could not access Calendar");
+                //this.logger.LogError("Could not access Calendar");
                 await this.repository.DeleteEvent(eventModel.Id, cancellationToken);
 
                 throw new EventException(e.Message, e);
