@@ -1,11 +1,15 @@
 using MadLearning.API.Application;
 using MadLearning.API.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
 
 namespace MadLearning.API
 {
@@ -21,6 +25,13 @@ namespace MadLearning.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddMicrosoftIdentityWebApi(this.Configuration)
+                .EnableTokenAcquisitionToCallDownstreamApi()
+                .AddMicrosoftGraph(this.Configuration.GetSection("GraphApi"))
+                .AddInMemoryTokenCaches();
+            services.AddLogging();
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
@@ -58,6 +69,7 @@ namespace MadLearning.API
 
             app.UseCors();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(static endpoints =>

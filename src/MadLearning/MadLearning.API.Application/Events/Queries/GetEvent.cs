@@ -17,12 +17,19 @@ namespace MadLearning.API.Application.Events.Queries
             if (string.IsNullOrWhiteSpace(request.Id))
                 throw new ArgumentException("Null or whitespace Event ID");
 
-            var dto = await this.repository.GetEvent(request.Id, cancellationToken);
+            try
+            {
+                var dto = await this.repository.GetEvent(request.Id, cancellationToken);
 
-            if (dto is null)
-                return null;
+                if (dto is null)
+                    return null;
 
-            return dto.ToApiDto();
+                return dto.ToApiDto();
+            }
+            catch (StorageException e)
+            {
+                throw new EventException(e.Message, e);
+            }
         }
     }
 }

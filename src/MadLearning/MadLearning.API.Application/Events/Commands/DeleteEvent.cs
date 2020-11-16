@@ -12,8 +12,15 @@ namespace MadLearning.API.Application.Events.Commands
     {
         public async Task<Unit> Handle(DeleteEvent request, CancellationToken cancellationToken)
         {
-            await this.repository.DeleteEvent(request.dto.Id, cancellationToken);
-            return Unit.Value;
+            try
+            {
+                await this.repository.DeleteEvent(request.dto.Id, cancellationToken);
+                return Unit.Value;
+            }
+            catch (StorageException e)
+            {
+                throw new EventException(e.Message, e);
+            }
         }
     }
 }
