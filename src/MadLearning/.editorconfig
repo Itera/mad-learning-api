@@ -274,3 +274,9 @@ dotnet_diagnostic.SA1204.severity = none
 
 # SA1402: File may only contain a single type
 dotnet_diagnostic.SA1402.severity = none
+
+# CA2234: Pass system uri objects instead of strings
+dotnet_diagnostic.CA2234.severity = none
+
+# CA1032: Implement standard exception constructors
+dotnet_diagnostic.CA1032.severity = none
