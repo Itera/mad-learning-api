@@ -24,27 +24,41 @@ namespace MadLearning.API.Infrastructure.Persistence
 
         public async Task<EventModel?> GetEvent(string eventId, CancellationToken cancellationToken)
         {
-            var cursor = await this.collection.FindAsync(e => e.Id == eventId, cancellationToken: cancellationToken);
+            try
+            {
+                var cursor = await this.collection.FindAsync(e => e.Id == eventId, cancellationToken: cancellationToken);
 
-            var @event = await cursor.SingleOrDefaultAsync(cancellationToken);
+                var @event = await cursor.SingleOrDefaultAsync(cancellationToken);
 
-            if (@event is null)
-                return null;
+                if (@event is null)
+                    return null;
 
-            return @event.ToEventModel();
+                return @event.ToEventModel();
+            }
+            catch (Exception e) when (e is TimeoutException || e is MongoException)
+            {
+                throw new StorageException(e.Message, e);
+            }
         }
 
         public async Task<List<EventModel>> GetEvents(EventFilterApiDto eventFilter, CancellationToken cancellationToken)
         {
-            var filter = CreateFilter(eventFilter);
+            try
+            {
+                var filter = CreateFilter(eventFilter);
 
-            var events = this.collection.Find(filter).SortBy(e => e.StartTime).Limit(eventFilter.Limit);
+                var events = this.collection.Find(filter).Limit(eventFilter.Limit);
 
-            var dtos = await events.ToListAsync(cancellationToken);
+                var dtos = await events.ToListAsync(cancellationToken);
 
-            return dtos
-                .Select(dto => dto.ToEventModel())
-                .ToList();
+                return dtos
+                    .Select(dto => dto.ToEventModel())
+                    .ToList();
+            }
+            catch (Exception e) when (e is TimeoutException || e is MongoException)
+            {
+                throw new StorageException(e.Message, e);
+            }
 
             static FilterDefinition<EventModelDbDto> CreateFilter(EventFilterApiDto eventFilter)
             {
@@ -57,6 +71,20 @@ namespace MadLearning.API.Infrastructure.Persistence
 
         public async Task<EventModel> CreateEvent(EventModel eventModel, CancellationToken cancellationToken)
         {
+            try
+            {
+                var dbDto = eventModel.ToDbDto();
+                await this.collection.InsertOneAsync(dbDto, cancellationToken: cancellationToken);
+
+                eventModel = dbDto.ToEventModel();
+
+                return eventModel;
+            }
+            catch (Exception e) when (e is TimeoutException || e is MongoException)
+            {
+                throw new StorageException(e.Message, e);
+            }
+        {
             var dbDto = eventModel.ToDbDto();
             await this.collection.InsertOneAsync(dbDto, cancellationToken: cancellationToken);
 
@@ -67,12 +95,26 @@ namespace MadLearning.API.Infrastructure.Persistence
 
         public async Task DeleteEvent(string id, CancellationToken cancellationToken)
         {
-            await this.collection.DeleteOneAsync(ev => ev.Id == id, cancellationToken);
+            try
+            {
+                await this.collection.DeleteOneAsync(ev => ev.Id == id, cancellationToken);
+            }
+            catch (Exception e) when (e is TimeoutException || e is MongoException)
+            {
+                throw new StorageException(e.Message, e);
+            }
         }
 
         public async Task UpdateEvent(EventModel eventModel, CancellationToken cancellationToken)
         {
-            await this.collection.ReplaceOneAsync(ev => ev.Id == eventModel.Id, eventModel.ToDbDto(), cancellationToken: cancellationToken);
+            try
+            {
+                await this.collection.ReplaceOneAsync(ev => ev.Id == eventModel.Id, eventModel.ToDbDto(), cancellationToken: cancellationToken);
+            }
+            catch (Exception e) when (e is TimeoutException || e is MongoException)
+            {
+                throw new StorageException(e.Message, e);
+            }
         }
     }
 }

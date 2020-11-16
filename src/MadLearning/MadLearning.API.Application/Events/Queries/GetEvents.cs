@@ -15,9 +15,16 @@ namespace MadLearning.API.Application.Events.Queries
     {
         public async Task<List<GetEventModelApiDto>> Handle(GetEvents request, CancellationToken cancellationToken)
         {
-            var eventModels = await this.repository.GetEvents(request.dto, cancellationToken);
+            try
+            {
+                var eventModels = await this.repository.GetEvents(request.dto, cancellationToken);
 
-            return eventModels.Select(dto => dto.ToApiDto()).ToList();
+                return eventModels.Select(dto => dto.ToApiDto()).ToList();
+            }
+            catch (StorageException e)
+            {
+                throw new EventException(e.Message, e);
+            }
         }
     }
 }

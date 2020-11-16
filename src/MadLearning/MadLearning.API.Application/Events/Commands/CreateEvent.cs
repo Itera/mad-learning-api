@@ -1,18 +1,20 @@
 ﻿using MadLearning.API.Application.Dtos;
 using MadLearning.API.Application.Mapping;
 using MadLearning.API.Application.Persistence;
+using MadLearning.API.Application.Service;
 using MadLearning.API.Domain.Entities;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MadLearning.API.Application.Events.Commands
 {
-    public sealed record CreateEvent(CreateEventModelApiDto dto) : IRequest<GetEventModelApiDto>;
+    public sealed record CreateEvent(CreateEventModelApiDto dto) : IRequest<GetEventModelApiDto?>;
 
-    internal sealed record CreateEventCommandHandler(IEventRepository repository) : IRequestHandler<CreateEvent, GetEventModelApiDto>
+    internal sealed record CreateEventCommandHandler(IEventRepository repository, ICalendarService calendarService) : IRequestHandler<CreateEvent, GetEventModelApiDto?>
     {
-        public async Task<GetEventModelApiDto> Handle(CreateEvent request, CancellationToken cancellationToken)
+        public async Task<GetEventModelApiDto?> Handle(CreateEvent request, CancellationToken cancellationToken)
         {
             var eventModel = EventModel.Create(
                     request.dto.Name,
@@ -24,9 +26,27 @@ namespace MadLearning.API.Application.Events.Commands
                     request.dto.Location,
                     request.dto.Owner.ToPersonModel()!);
 
-            var createdEvent = await this.repository.CreateEvent(eventModel, cancellationToken);
+            try
+            {
+                var createdEvent = await this.repository.CreateEvent(eventModel, cancellationToken);
 
-            return createdEvent.ToApiDto();
+                await this.calendarService.AddEvent(createdEvent);
+
+                return createdEvent.ToApiDto();
+            }
+            catch (StorageException e)
+            {
+                //this.logger.LogError("Could not create Event");
+
+                throw new EventException(e.Message, e);
+            }
+            catch (CalendarException e)
+            {
+                //this.logger.LogError("Could not access Calendar");
+                await this.repository.DeleteEvent(eventModel.Id, cancellationToken);
+
+                throw new EventException(e.Message, e);
+            }
         }
     }
 }

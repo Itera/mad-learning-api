@@ -1,3 +1,5 @@
+﻿using MadLearning.API.Application.Persistence;
+using MadLearning.API.Application.Service;
 ﻿using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
@@ -32,9 +34,9 @@ namespace MadLearning.API.Infrastructure
 
             {
                 // Dependencies
-                services.AddSingleton(sp => new MongoClient(sp.GetRequiredService<EventDbSettings>().ConnectionString));
-                services.AddSingleton<IEventRepository, EventRepository>();
-                services.AddSingleton<IIdGenerator, IdGenerator>();
+                services.AddTransient<IEventRepository, EventRepository>();
+                services.AddTransient<Application.Services.IIdGenerator, IdGenerator>();
+                services.AddTransient<ICalendarService, CalendarService>();
 
                 services.Configure<SlackOptions>(
                         configuration.GetSection(nameof(SlackOptions)));
