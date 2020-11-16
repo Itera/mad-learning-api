@@ -33,8 +33,9 @@ namespace MadLearning.API.Infrastructure
 
             {
                 // Dependencies
-                services.AddTransient<IEventRepository, EventRepository>();
-                services.AddTransient<Application.Services.IIdGenerator, IdGenerator>();
+                services.AddSingleton(sp => new MongoClient(sp.GetRequiredService<EventDbSettings>().ConnectionString));
+                services.AddSingleton<IEventRepository, EventRepository>();
+                services.AddSingleton<IIdGenerator, IdGenerator>();
                 services.AddTransient<ICalendarService, CalendarService>();
 
                 services.Configure<SlackOptions>(
