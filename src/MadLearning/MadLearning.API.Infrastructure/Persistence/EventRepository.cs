@@ -84,13 +84,6 @@ namespace MadLearning.API.Infrastructure.Persistence
             {
                 throw new StorageException(e.Message, e);
             }
-        {
-            var dbDto = eventModel.ToDbDto();
-            await this.collection.InsertOneAsync(dbDto, cancellationToken: cancellationToken);
-
-            eventModel = dbDto.ToEventModel();
-
-            return eventModel;
         }
 
         public async Task DeleteEvent(string id, CancellationToken cancellationToken)

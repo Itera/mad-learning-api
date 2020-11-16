@@ -1,10 +1,9 @@
-﻿using MadLearning.API.Application.Persistence;
-using MadLearning.API.Application.Service;
 ﻿using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
 using Hangfire.Mongo.Migration.Strategies.Backup;
 using MadLearning.API.Application.Persistence;
+using MadLearning.API.Application.Service;
 using MadLearning.API.Application.Services;
 using MadLearning.API.Infrastructure.Configuration;
 using MadLearning.API.Infrastructure.Persistence;
