@@ -43,6 +43,33 @@ jobs:
           k8s-url: ${{ secrets.MAD_K8S_URL }}
           k8s-secret: ${{ secrets.MAD_K8S_CI_SECRET }}
         id: setcontext
+      # Create k8s secrets
+      - name: Generate secret.json
+        run: >
+          jq -n
+          --arg mongodb_username "${{ secrets.APP_MONGODB_USERNAME }}"
+          --arg mongodb_password "${{ secrets.APP_MONGODB_PASSWORD }}"
+          '{
+            "MongoDbSecrets": {
+              "Username": $mongodb_username,
+              "Password": $mongodb_password
+            }
+          }'
+          > appsettings.secrets.json
+      - uses: azure/k8s-create-secret@v1
+        with:
+          namespace: '${{ env.NAMESPACE }}'
+          secret-type: 'generic'
+          arguments:  --from-file=appsettings.secrets.json
+          secret-name: secret-appsettings
+      - uses: azure/k8s-create-secret@v1
+        with:
+          namespace: '${{ env.NAMESPACE }}'
+          secret-type: 'generic'
+          arguments: >
+            --from-literal=username="${{ secrets.APP_MONGODB_USERNAME }}"
+            --from-literal=password="${{ secrets.APP_MONGODB_PASSWORD }}"
+          secret-name: mongodb-secret
       # Deploy app to AKS
       - uses: azure/k8s-deploy@v1
         with:

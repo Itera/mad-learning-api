@@ -7,6 +7,7 @@ Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration((hostingContext, config) =>
     {
         config.AddEnvironmentVariables(prefix: "MadLearning_");
+        config.AddJsonFile("secrets/appsettings.secrets.json");
     })
     .ConfigureWebHostDefaults(webBuilder =>
     {

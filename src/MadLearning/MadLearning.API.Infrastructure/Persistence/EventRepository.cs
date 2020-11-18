@@ -16,9 +16,13 @@ namespace MadLearning.API.Infrastructure.Persistence
     {
         private readonly IMongoCollection<EventModelDbDto> collection;
 
-        public EventRepository(EventDbSettings eventDbSettings)
+        public EventRepository(EventDbSettings eventDbSettings, MongoDbSecrets mongoDbSecrets)
         {
-            var client = new MongoClient(eventDbSettings.ConnectionString);
+            var connectionString = eventDbSettings.ConnectionString
+                .Replace("{username}", mongoDbSecrets.Username, StringComparison.Ordinal)
+                .Replace("{password}", mongoDbSecrets.Password, StringComparison.Ordinal);
+
+            var client = new MongoClient(connectionString);
             var database = client.GetDatabase(eventDbSettings.DatabaseName);
 
             this.collection = database.GetCollection<EventModelDbDto>(eventDbSettings.EventCollectionName);
