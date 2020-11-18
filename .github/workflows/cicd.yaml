@@ -1,24 +1,11 @@
 name: CI/CD Production
 
 on:
-  push:
-    branches:
-        - master
+  pull_request
 
 jobs:
-  build-and-test:
-    name: Build and test
-    runs-on: ubuntu-latest
-    env:
-        PROJECT_PATH: src/MadLearning/MadLearning.API/MadLearning.API.csproj
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-dotnet@v1
-    - run: dotnet restore ${{ env.PROJECT_PATH }}
-    - run: dotnet build -c Release --no-restore ${{ env.PROJECT_PATH }}
   build-and-publish:
     name: Build and publish Docker image
-    needs: build-and-test
     runs-on: ubuntu-latest
     env:
       APP_NAME: mad-learning-api
