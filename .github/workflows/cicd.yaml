@@ -16,7 +16,6 @@ jobs:
     - uses: actions/setup-dotnet@v1
     - run: dotnet restore ${{ env.PROJECT_PATH }}
     - run: dotnet build -c Release --no-restore ${{ env.PROJECT_PATH }}
-    - run: dotnet test --no-restore -v normal ${{ env.PROJECT_PATH }}
   build-and-publish:
     name: Build and publish Docker image
     needs: build-and-test
