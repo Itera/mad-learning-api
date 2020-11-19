@@ -15,7 +15,7 @@ spec:
         app: mad-learning-api
     spec:
       containers:
-      - name: mad-learning-web
+      - name: mad-learning-api
         image: itemadacr.azurecr.io/mad-learning-api:latest
         ports:
             - containerPort: 80
