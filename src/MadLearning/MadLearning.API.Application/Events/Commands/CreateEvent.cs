@@ -30,7 +30,7 @@ namespace MadLearning.API.Application.Events.Commands
             {
                 var createdEvent = await this.repository.CreateEvent(eventModel, cancellationToken);
 
-                await this.calendarService.AddEvent(createdEvent);
+                //await this.calendarService.AddEvent(createdEvent);
 
                 return createdEvent.ToApiDto();
             }

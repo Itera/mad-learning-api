@@ -41,7 +41,7 @@ namespace MadLearning.API.Controllers
         [HttpPost]
         public async Task<GetEventModelApiDto?> CreateEvent([FromBody] CreateEventModelApiDto eventModel, CancellationToken cancellationToken)
         {
-            this.HttpContext.VerifyUserHasAnyAcceptedScope(this.configuration["ApiScope"]);
+            //this.HttpContext.VerifyUserHasAnyAcceptedScope(this.configuration["ApiScope"]);
 
             return await this.Mediator.Send(new CreateEvent(eventModel), cancellationToken);
         }
@@ -56,6 +56,12 @@ namespace MadLearning.API.Controllers
         public async Task DeleteEvent([FromBody] DeleteEventModelApiDto eventModel, CancellationToken cancellationToken)
         {
             await this.Mediator.Send(new DeleteEvent(eventModel), cancellationToken);
+        }
+
+        [HttpPut]
+        public async Task RSVPToEvent([FromBody] RSVPToEventModelApiDto eventModel, CancellationToken cancellationToken) // Is it correct to call it <..>ModelApiDto?
+        {
+            await this.Mediator.Send(new RSVPToEvent(eventModel), cancellationToken);
         }
     }
 }
