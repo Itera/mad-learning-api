@@ -111,5 +111,20 @@ namespace MadLearning.API.Infrastructure.Persistence
                 throw new StorageException(e.Message, e);
             }
         }
+
+        public async Task RSVPToEvent(string id, string email, string firstName, string lastName, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await this.collection.UpdateOneAsync(
+                    Builders<EventModelDbDto>.Filter.Where(dto => dto.Id == id && dto.Owner!.Email != email),
+                    Builders<EventModelDbDto>.Update.AddToSet("Participants", new PersonModelDbDto { Id = id, Email = email, FirstName = firstName, LastName = lastName }),
+                    cancellationToken: cancellationToken);
+            }
+            catch (Exception e) when (e is TimeoutException || e is MongoException)
+            {
+                throw new StorageException(e.Message, e);
+            }
+        }
     }
 }

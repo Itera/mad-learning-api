@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -58,10 +61,18 @@ namespace MadLearning.API.Controllers
             await this.Mediator.Send(new DeleteEvent(eventModel), cancellationToken);
         }
 
-        [HttpPut]
-        public async Task RSVPToEvent([FromBody] RSVPToEventModelApiDto eventModel, CancellationToken cancellationToken) // Is it correct to call it <..>ModelApiDto?
+        [HttpPut("{eventId}")]
+        public async Task RSVPToEvent([FromQuery] string eventId, CancellationToken cancellationToken)
         {
-            await this.Mediator.Send(new RSVPToEvent(eventModel), cancellationToken);
+            if (this.HttpContext.User == null || this.HttpContext.User.Identity?.Name == null)
+            {
+                throw new Exception("HttpContext nullable error");
+            }
+
+            var email = this.HttpContext.User.Identity.Name;
+            var firstName = this.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.GivenName).Value;
+            var lastName = this.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Surname).Value;
+            await this.Mediator.Send(new RSVPToEvent(eventId, email, firstName, lastName), cancellationToken);
         }
     }
 }

@@ -11,14 +11,21 @@ using System.Threading.Tasks;
 
 namespace MadLearning.API.Application.Events.Commands
 {
-    public sealed record RSVPToEvent(RSVPToEventModelApiDto dto) : IRequest;
+    public sealed record RSVPToEvent(string Id, string Email, string FirstName, string LastName) : IRequest;
 
     internal sealed record RSVPToEventCommandHandler(IEventRepository repository) : IRequestHandler<RSVPToEvent>
     {
         public async Task<Unit> Handle(RSVPToEvent request, CancellationToken cancellationToken)
         {
-            var eventModel = EventModel.RSVPToEvent(
-                )
+            try
+            {
+                await this.repository.RSVPToEvent(request.Id, request.Email, request.FirstName, request.LastName, cancellationToken);
+                return Unit.Value;
+            }
+            catch (StorageException e)
+            {
+                throw new EventException(e.Message, e);
+            }
         }
     }
 }

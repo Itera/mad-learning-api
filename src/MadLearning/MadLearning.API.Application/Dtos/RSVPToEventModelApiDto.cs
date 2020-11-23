@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace MadLearning.API.Application.Dtos
 {
     public record RSVPToEventModelApiDto(
-        IEnumerable<PersonModelApiDto>? Participants);
+        string Id);
 }
