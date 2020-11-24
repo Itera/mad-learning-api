@@ -50,15 +50,18 @@ jobs:
         with:
           release: 'mongodb'
           namespace: '${{ env.NAMESPACE }}'
-          chart: 'bitnami/mongodb'
-          chart_version: '10.0.5'
+          chart: 'https://charts.bitnami.com/bitnami/mongodb-10.0.5.tgz'
           version: '4.4.2'
-          repository: 'https://charts.bitnami.com/bitnami'
           helm: 'helm3'
           values: |
             architecture: standalone
             auth:
               rootPassword: '${{ secrets.APP_MONGODB_PASSWORD }}'
+            global:
+              storageClass: 'default'
+            persistence:
+              storageClass: 'default'
+              size: 32Gi
         env:
           KUBECONFIG_FILE: '${{ secrets.MAD_KUBECONFIG }}'
       # Deploy app to AKS
