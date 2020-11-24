@@ -20,18 +20,29 @@ namespace MadLearning.API.Infrastructure.Services
         private const string ContentType = "application/json";
 
         private readonly ILogger<SlackChatMesssageService> logger;
-        private readonly HttpClient httpClient;
+        private readonly HttpClient? httpClient;
 
         public SlackChatMesssageService(ILogger<SlackChatMesssageService> logger, HttpClient httpClient, IOptions<SlackOptions> options)
         {
             this.logger = logger;
-            httpClient.BaseAddress = new Uri(options.Value.WebHookUrl ?? throw new Exception("No webhook URL configured"));
-            httpClient.DefaultRequestHeaders.Add("Accept", ContentType);
-            this.httpClient = httpClient;
+
+            if (!string.IsNullOrWhiteSpace(options.Value.WebHookUrl) && options.Value.WebHookUrl != "<url>")
+            {
+                httpClient.BaseAddress = new Uri(options.Value.WebHookUrl ?? throw new Exception("No webhook URL configured"));
+                httpClient.DefaultRequestHeaders.Add("Accept", ContentType);
+
+                this.httpClient = httpClient;
+            }
         }
 
         public async Task SendMessage(string message, CancellationToken cancellationToken)
         {
+            if (this.httpClient is null)
+            {
+                this.logger.LogInformation("Slack integration not configured, would send: {message}", message);
+                return;
+            }
+
             message = message.Replace('"', '\'');
 
             var responseContent = string.Empty;

@@ -17,11 +17,16 @@ spec:
       containers:
       - name: mad-learning-api
         image: itemadacr.azurecr.io/mad-learning-api:latest
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: DOTNET_ENVIRONMENT
+          value: Production
         ports:
             - containerPort: 80
         volumeMounts:
         - name: secrets
-          mountPath: "/app/secrets"
+          mountPath: "/app"
           readOnly: true
       volumes:
       - name: secrets

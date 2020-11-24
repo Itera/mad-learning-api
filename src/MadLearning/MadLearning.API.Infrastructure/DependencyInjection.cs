@@ -24,12 +24,6 @@ namespace MadLearning.API.Infrastructure
         {
             {
                 // Configuration
-                services.Configure<MongoDbSecretsDto>(
-                        configuration.GetSection(nameof(MongoDbSecrets)));
-
-                services.AddSingleton<MongoDbSecrets>(static sp =>
-                        sp.GetRequiredService<IOptions<MongoDbSecretsDto>>().Value);
-
                 services.Configure<EventDbSettingsDto>(
                         configuration.GetSection(nameof(EventDbSettings)));
 

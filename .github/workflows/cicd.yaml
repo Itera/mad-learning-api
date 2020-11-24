@@ -26,44 +26,46 @@ jobs:
       # Set the target Azure Kubernetes Service (AKS) cluster. 
       - uses: azure/k8s-set-context@v1
         with:
-          method: service-account
-          k8s-url: ${{ secrets.MAD_K8S_URL }}
-          k8s-secret: ${{ secrets.MAD_K8S_CI_SECRET }}
+          method: kubeconfig
+          kubeconfig: ${{ secrets.MAD_KUBECONFIG }}
         id: setcontext
       # Create k8s secrets
       - name: Generate secret.json
         run: >
           jq -n
-          --arg mongodb_username "${{ secrets.APP_MONGODB_USERNAME }}"
-          --arg mongodb_password "${{ secrets.APP_MONGODB_PASSWORD }}"
           '{
-            "MongoDbSecrets": {
-              "Username": $mongodb_username,
-              "Password": $mongodb_password
+            "EventDbSettings": {
+              "ConnectionString": "mongodb://${{ secrets.APP_MONGODB_USERNAME }}:${{ secrets.APP_MONGODB_PASSWORD }}@mongodb:27017"
             }
           }'
-          > appsettings.secrets.json
+          > appsettings.Production.json
       - uses: azure/k8s-create-secret@v1
         with:
           namespace: '${{ env.NAMESPACE }}'
           secret-type: 'generic'
-          arguments:  --from-file=appsettings.secrets.json
+          arguments:  --from-file=appsettings.Production.json
           secret-name: secret-appsettings
-      - uses: azure/k8s-create-secret@v1
+      - name: 'Deploy MongoDB'
+        uses: 'deliverybot/helm@v1'
         with:
+          release: 'mongodb'
           namespace: '${{ env.NAMESPACE }}'
-          secret-type: 'generic'
-          arguments: >
-            --from-literal=username="${{ secrets.APP_MONGODB_USERNAME }}"
-            --from-literal=password="${{ secrets.APP_MONGODB_PASSWORD }}"
-          secret-name: mongodb-secret
+          chart: 'bitnami/mongodb'
+          chart_version: '10.0.5'
+          version: '4.4.2'
+          repository: 'https://charts.bitnami.com/bitnami'
+          helm: 'helm3'
+          values: |
+            architecture: standalone
+            auth:
+              rootPassword: '${{ secrets.APP_MONGODB_PASSWORD }}'
+        env:
+          KUBECONFIG_FILE: '${{ secrets.MAD_KUBECONFIG }}'
       # Deploy app to AKS
       - uses: azure/k8s-deploy@v1
         with:
           manifests: |
             infrastructure/kubernetes/deployment.yaml
             infrastructure/kubernetes/service.yaml
-            infrastructure/kubernetes/mongodb/mongodb-deployment.yaml
-            infrastructure/kubernetes/mongodb/mongodb-service.yaml
-          images: ${{ env.REGISTRY_NAME }}/${{ env.APP_NAME }}:latest
+          images: ${{ env.REGISTRY_NAME }}/${{ env.APP_NAME }}:${{ github.sha }}
           namespace: ${{ env.NAMESPACE }} 
