@@ -36,7 +36,19 @@ jobs:
           '{
             "EventDbSettings": {
               "ConnectionString": "mongodb://${{ secrets.APP_MONGODB_USERNAME }}:${{ secrets.APP_MONGODB_PASSWORD }}@mongodb:27017"
-            }
+            },
+            "AzureAd": {
+              "Instance": "${{ secrets.APP_AZUREAD_INSTANCE }}",
+              "Domain": "${{ secrets.APP_AZUREAD_DOMAIN }}",
+              "TenantId": "${{ secrets.APP_AZUREAD_TENANT_ID }}",
+              "ClientId": "${{ secrets.APP_AZUREAD_CLIENT_ID }}",
+              "ClientSecret": "${{ secrets.APP_AZUREAD_CLIENT_SECRET }}",
+              "Audience": "${{ secrets.APP_AZUREAD_AUDIENCE }}"
+            },
+            "SlackOptions": {
+              "WebHookUrl": "${{ secrets.APP_SLACK_OPTIONS_WEBHOOKURL }}"
+            },
+            "PathBase": "/api"
           }'
           > appsettings.Production.json
       - uses: azure/k8s-create-secret@v1
@@ -70,5 +82,7 @@ jobs:
           manifests: |
             infrastructure/kubernetes/deployment.yaml
             infrastructure/kubernetes/service.yaml
+            infrastructure/kubernetes/ingress-master.yaml
+            infrastructure/kubernetes/ingress.yaml
           images: ${{ env.REGISTRY_NAME }}/${{ env.APP_NAME }}:${{ github.sha }}
           namespace: ${{ env.NAMESPACE }} 

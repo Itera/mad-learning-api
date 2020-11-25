@@ -35,8 +35,11 @@ namespace MadLearning.API.Application.Jobs
             };
             var events = await this.eventRepository.GetEvents(filter, cancellationToken);
 
+            if (events.Count == 0)
+                return;
+
             var names = events
-                .Select(e => $"• {e.StartTime:HH:mm}-{e.EndTime:HH:mm} - <https://vg.no|{e.Name}> at {e.Location}") // TODO fix link
+                .Select(e => $"• {e.StartTime:HH:mm}-{e.EndTime:HH:mm} - <https://learning.mad.itera.no/event/{e.Id}|{e.Name}> at {e.Location}")
                 .ToArray();
 
             var message = $"*Here are tomorrow's events:* \n{string.Join('\n', names)}";
