@@ -1,0 +1,90 @@
+name: CI/CD Production
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  build-and-publish:
+    name: Build and publish Docker image
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: mad-learning-api
+      REGISTRY_NAME: itemadacr.azurecr.io
+      NAMESPACE: production-mad-learning
+    steps:
+      - uses: actions/checkout@master
+      # Connect to Azure Container registry (ACR)
+      - uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.REGISTRY_NAME }}
+          username: ${{ secrets.MAD_DOCKER_PUSH_USERNAME }}
+          password: ${{ secrets.MAD_DOCKER_PUSH_PASSWORD }}
+      # Container build and push to a Azure Container registry (ACR)
+      - run: |
+          docker build . -t ${{ env.REGISTRY_NAME }}/${{ env.APP_NAME }}:${{ github.sha }} -t ${{ env.REGISTRY_NAME }}/${{ env. APP_NAME }}:latest
+          docker push ${{ env.REGISTRY_NAME }}/${{ env.APP_NAME }}
+      # Set the target Azure Kubernetes Service (AKS) cluster. 
+      - uses: azure/k8s-set-context@v1
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.MAD_KUBECONFIG }}
+        id: setcontext
+      # Create k8s secrets
+      - name: Generate secret.json
+        run: >
+          jq -n
+          '{
+            "EventDbSettings": {
+              "ConnectionString": "mongodb://${{ secrets.APP_MONGODB_USERNAME }}:${{ secrets.APP_MONGODB_PASSWORD }}@mongodb:27017"
+            },
+            "AzureAd": {
+              "Instance": "${{ secrets.APP_AZUREAD_INSTANCE }}",
+              "Domain": "${{ secrets.APP_AZUREAD_DOMAIN }}",
+              "TenantId": "${{ secrets.APP_AZUREAD_TENANT_ID }}",
+              "ClientId": "${{ secrets.APP_AZUREAD_CLIENT_ID }}",
+              "ClientSecret": "${{ secrets.APP_AZUREAD_CLIENT_SECRET }}",
+              "Audience": "${{ secrets.APP_AZUREAD_AUDIENCE }}"
+            },
+            "SlackOptions": {
+              "WebHookUrl": "${{ secrets.APP_SLACK_OPTIONS_WEBHOOKURL }}"
+            },
+            "PathBase": "/api"
+          }'
+          > appsettings.Production.json
+      - uses: azure/k8s-create-secret@v1
+        with:
+          namespace: '${{ env.NAMESPACE }}'
+          secret-type: 'generic'
+          arguments:  --from-file=appsettings.Production.json
+          secret-name: secret-appsettings
+      - name: 'Deploy MongoDB'
+        uses: 'deliverybot/helm@v1'
+        with:
+          release: 'mongodb'
+          namespace: '${{ env.NAMESPACE }}'
+          chart: 'https://charts.bitnami.com/bitnami/mongodb-10.0.5.tgz'
+          version: '4.4.2'
+          helm: 'helm3'
+          values: |
+            architecture: standalone
+            auth:
+              rootPassword: '${{ secrets.APP_MONGODB_PASSWORD }}'
+            global:
+              storageClass: 'default'
+            persistence:
+              storageClass: 'default'
+              size: 32Gi
+        env:
+          KUBECONFIG_FILE: '${{ secrets.MAD_KUBECONFIG }}'
+      # Deploy app to AKS
+      - uses: azure/k8s-deploy@v1
+        with:
+          manifests: |
+            infrastructure/kubernetes/deployment.yaml
+            infrastructure/kubernetes/service.yaml
+            infrastructure/kubernetes/ingress-master.yaml
+            infrastructure/kubernetes/ingress.yaml
+          images: ${{ env.REGISTRY_NAME }}/${{ env.APP_NAME }}:${{ github.sha }}
+          namespace: ${{ env.NAMESPACE }} 

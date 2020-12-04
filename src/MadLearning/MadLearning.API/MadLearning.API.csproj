@@ -24,7 +24,4 @@
       <ProjectReference Include="..\MadLearning.API.Application\MadLearning.API.Application.csproj" />
       <ProjectReference Include="..\MadLearning.API.Infrastructure\MadLearning.API.Infrastructure.csproj" />
     </ItemGroup>
-
-    <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://json.schemastore.org/appsettings" /></VisualStudio></ProjectExtensions>
-
 </Project>

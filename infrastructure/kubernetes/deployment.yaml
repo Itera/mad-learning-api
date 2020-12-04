@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mad-learning-api
+  labels:
+    app: mad-learning-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mad-learning-api
+  template:
+    metadata:
+      labels:
+        app: mad-learning-api
+    spec:
+      containers:
+      - name: mad-learning-api
+        image: itemadacr.azurecr.io/mad-learning-api:latest
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: DOTNET_ENVIRONMENT
+          value: Production
+        ports:
+            - containerPort: 80
+        volumeMounts:
+        - name: secrets
+          mountPath: "/app/secrets"
+          readOnly: true
+      volumes:
+      - name: secrets
+        secret:
+          secretName: secret-appsettings

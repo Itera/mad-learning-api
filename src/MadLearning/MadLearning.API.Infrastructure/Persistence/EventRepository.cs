@@ -1,5 +1,4 @@
 ﻿using MadLearning.API.Application.Dtos;
-using MadLearning.API.Application.Mapping;
 using MadLearning.API.Application.Persistence;
 using MadLearning.API.Domain.Entities;
 using MadLearning.API.Infrastructure.Configuration;
@@ -16,9 +15,8 @@ namespace MadLearning.API.Infrastructure.Persistence
     {
         private readonly IMongoCollection<EventModelDbDto> collection;
 
-        public EventRepository(EventDbSettings eventDbSettings)
+        public EventRepository(EventDbSettings eventDbSettings, MongoClient client)
         {
-            var client = new MongoClient(eventDbSettings.ConnectionString);
             var database = client.GetDatabase(eventDbSettings.DatabaseName);
 
             this.collection = database.GetCollection<EventModelDbDto>(eventDbSettings.EventCollectionName);

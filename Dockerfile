@@ -6,11 +6,17 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
-WORKDIR /src
-COPY ["MadLearning.API/MadLearning.API.csproj", "MadLearning.API/"]
+WORKDIR "/src"
+COPY [".editorconfig", "./"]
+COPY ["global.json", "./"]
+WORKDIR "/src/MadLearning"
+COPY ["src/MadLearning/MadLearning.API/MadLearning.API.csproj", "MadLearning.API/"]
+COPY ["src/MadLearning/MadLearning.API.Application/MadLearning.API.Application.csproj", "MadLearning.API.Application/"]
+COPY ["src/MadLearning/MadLearning.API.Domain/MadLearning.API.Domain.csproj", "MadLearning.API.Domain/"]
+COPY ["src/MadLearning/MadLearning.API.Infrastructure/MadLearning.API.Infrastructure.csproj", "MadLearning.API.Infrastructure/"]
 RUN dotnet restore "MadLearning.API/MadLearning.API.csproj"
-COPY . .
-WORKDIR "/src/MadLearning.API"
+COPY ["./src/*", "."]
+WORKDIR "/src/MadLearning/MadLearning.API"
 RUN dotnet build "MadLearning.API.csproj" -c Release -o /app/build
 
 FROM build AS publish

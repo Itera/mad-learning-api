@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace MadLearning.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public abstract class ApiControllerBase : ControllerBase
     {
         private IMediator? mediator;
