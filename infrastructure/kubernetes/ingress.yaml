@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: mad-learning-api
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.org/mergeable-ingress-type: minion
+spec:
+  rules:
+    - host: learning.mad.itera.no
+      http:
+        paths:
+          - backend:
+              serviceName: mad-learning-api
+              servicePort: 5001
+            path: /api

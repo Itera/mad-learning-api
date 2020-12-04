@@ -10,7 +10,7 @@
 
 	<PropertyGroup>
 		<MongoDbVersion>2.11.2</MongoDbVersion>
-		<DotNetVersion>5.0.0-rc.1.20451.*</DotNetVersion>
+		<DotNetVersion>5.0.*</DotNetVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

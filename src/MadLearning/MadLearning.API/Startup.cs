@@ -3,13 +3,12 @@ using MadLearning.API.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Collections.Generic;
 
 namespace MadLearning.API
 {
@@ -36,7 +35,7 @@ namespace MadLearning.API
             {
                 options.AddDefaultPolicy(
                     builder => builder
-                        .WithOrigins("http://localhost:3000") // TODO add production name
+                        .WithOrigins("http://localhost:3000", "https://learning.mad.itera.no")
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });
@@ -56,11 +55,21 @@ namespace MadLearning.API
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Framework needs this")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (!string.IsNullOrWhiteSpace(this.Configuration["PathBase"]))
+                app.UsePathBase(this.Configuration["PathBase"]);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(static c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MadLearning.API v1"));
+            }
+            else
+            {
+                app.UseForwardedHeaders(new ForwardedHeadersOptions
+                {
+                    ForwardedHeaders = ForwardedHeaders.All,
+                });
             }
 
             app.UseHttpsRedirection();

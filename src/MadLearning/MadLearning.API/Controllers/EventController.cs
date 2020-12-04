@@ -17,7 +17,7 @@ namespace MadLearning.API.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public sealed class EventController : ApiControllerBase
     {
         private readonly ITokenAcquisition tokenAcquisition;
