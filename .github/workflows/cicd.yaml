@@ -1,7 +1,9 @@
 name: CI/CD Production
 
 on:
-  pull_request
+  push:
+    branches:
+      - release
 
 jobs:
   build-and-publish:
