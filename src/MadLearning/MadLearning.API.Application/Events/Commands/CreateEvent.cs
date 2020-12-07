@@ -26,11 +26,13 @@ namespace MadLearning.API.Application.Events.Commands
                     request.dto.Location,
                     request.dto.Owner.ToPersonModel()!);
 
+            EventModel? createdEvent = null;
+
             try
             {
-                var createdEvent = await this.repository.CreateEvent(eventModel, cancellationToken);
+                createdEvent = await this.repository.CreateEvent(eventModel, cancellationToken);
 
-                //await this.calendarService.AddEvent(createdEvent);
+                await this.calendarService.AddEvent(createdEvent);
 
                 return createdEvent.ToApiDto();
             }
@@ -43,7 +45,9 @@ namespace MadLearning.API.Application.Events.Commands
             catch (CalendarException e)
             {
                 //this.logger.LogError("Could not access Calendar");
-                await this.repository.DeleteEvent(eventModel.Id, cancellationToken);
+
+                if (createdEvent is { })
+                    await this.repository.DeleteEvent(createdEvent.Id, cancellationToken);
 
                 throw new EventException(e.Message, e);
             }

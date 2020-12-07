@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using MadLearning.API.Application.Service;
+﻿using MadLearning.API.Application.Service;
 using MadLearning.API.Domain.Entities;
 using Microsoft.Graph;
 using Microsoft.Graph.Extensions;
-using Microsoft.Identity.Client;
-using Microsoft.Identity.Web;
+using System;
+using System.Threading.Tasks;
 
 namespace MadLearning.API.Infrastructure.Services
 {
     public class CalendarService : ICalendarService
     {
-        private readonly ITokenAcquisition tokenAcquisition;
         private readonly GraphServiceClient graphServiceClient;
 
-        public CalendarService(ITokenAcquisition tokenAcquisition, GraphServiceClient graphServiceClient)
+        public CalendarService(GraphServiceClient graphServiceClient)
         {
-            this.tokenAcquisition = tokenAcquisition;
             this.graphServiceClient = graphServiceClient;
         }
 
@@ -42,7 +34,7 @@ namespace MadLearning.API.Infrastructure.Services
             {
                 await this.graphServiceClient.Me.Events.Request().AddAsync(@event);
             }
-            catch (ServiceException e)
+            catch (Exception e)
             {
                 throw new CalendarException(e.Message, e);
             }

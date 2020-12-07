@@ -25,10 +25,11 @@ namespace MadLearning.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddMicrosoftIdentityWebApi(this.Configuration)
+                .AddMicrosoftIdentityWebApi(this.Configuration, "AzureAd")
                 .EnableTokenAcquisitionToCallDownstreamApi()
                 .AddMicrosoftGraph(this.Configuration.GetSection("GraphApi"))
                 .AddInMemoryTokenCaches();
+
             services.AddLogging();
 
             services.AddCors(options =>
