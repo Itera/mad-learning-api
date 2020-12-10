@@ -27,7 +27,7 @@ namespace MadLearning.API.Infrastructure.Services
             try
             {
                 var calendarEvent = await this.graphServiceClient.Me.Events.Request().AddAsync(@event, cancellationToken);
-                return calendarEvent.ICalUId;
+                return calendarEvent.Id;
             }
             catch (Exception e)
             {
@@ -37,7 +37,7 @@ namespace MadLearning.API.Infrastructure.Services
 
         public async Task RsvpToEvent(EventModel eventModel, CancellationToken cancellationToken)
         {
-            var iCalUid = eventModel.CalendarId;
+            var eventId = eventModel.CalendarId;
 
             try
             {
@@ -46,7 +46,7 @@ namespace MadLearning.API.Infrastructure.Services
 
                 var currentUser = this.currentUserService.GetUserInfo();
 
-                var events = this.graphServiceClient.Users[eventModel.Owner.Email].Events[iCalUid];
+                var events = this.graphServiceClient.Users[eventModel.Owner.Email].Events[eventId];
 
                 var existingEvent = await events.Request().GetAsync(cancellationToken);
 
@@ -68,7 +68,7 @@ namespace MadLearning.API.Infrastructure.Services
 
                 var @event = new Event
                 {
-                    ICalUId = iCalUid,
+                    Id = eventId,
                     Attendees = attendees,
                 };
 
