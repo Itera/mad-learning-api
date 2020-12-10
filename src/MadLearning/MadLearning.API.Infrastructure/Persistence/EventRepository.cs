@@ -53,6 +53,7 @@ namespace MadLearning.API.Infrastructure.Persistence
 
                 return dtos
                     .Select(dto => dto.ToEventModel())
+                    .OrderBy(dto => dto.StartTime)
                     .ToList();
             }
             catch (Exception e) when (e is TimeoutException || e is MongoException)

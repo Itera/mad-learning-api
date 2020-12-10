@@ -3,7 +3,6 @@ using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
 using Hangfire.Mongo.Migration.Strategies.Backup;
 using MadLearning.API.Application.Persistence;
-using MadLearning.API.Application.Service;
 using MadLearning.API.Application.Services;
 using MadLearning.API.Infrastructure.Configuration;
 using MadLearning.API.Infrastructure.Persistence;
@@ -71,6 +70,8 @@ namespace MadLearning.API.Infrastructure
                 services.AddSingleton<IJobScheduler, HangfireJobScheduler>();
 
                 services.AddSingleton<ITimeZoneService, TimeZoneService>();
+
+                services.AddSingleton<ICurrentUserService, AspNetCoreCurrentUserService>();
             }
 
             return services;

@@ -15,6 +15,8 @@ namespace MadLearning.API.Infrastructure.Persistence
             [BsonRepresentation(BsonType.ObjectId)]
             public string? Id { get; init; }
 
+            public string? CalendarId { get; set; }
+
             public DateTimeOffset StartTime { get; set; }
 
             public DateTimeOffset EndTime { get; set; }
@@ -44,6 +46,7 @@ namespace MadLearning.API.Infrastructure.Persistence
 
                 return new EventModel(
                     this.Id,
+                    this.CalendarId,
                     this.Name,
                     this.Description,
                     this.StartTime,

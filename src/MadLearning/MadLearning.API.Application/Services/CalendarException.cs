@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MadLearning.API.Application.Service
+namespace MadLearning.API.Application.Services
 {
     public class CalendarException : Exception
     {

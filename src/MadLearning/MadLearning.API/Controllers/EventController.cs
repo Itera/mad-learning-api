@@ -1,15 +1,10 @@
 ﻿using MadLearning.API.Application.Dtos;
 using MadLearning.API.Application.Events.Commands;
 using MadLearning.API.Application.Events.Queries;
+using MadLearning.API.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.Resource;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,15 +15,6 @@ namespace MadLearning.API.Controllers
     [Route("[controller]")]
     public sealed class EventController : ApiControllerBase
     {
-        private readonly ITokenAcquisition tokenAcquisition;
-        private IConfiguration configuration;
-
-        public EventController(IConfiguration configuration, ITokenAcquisition tokenAcquisition)
-        {
-            this.configuration = configuration;
-            this.tokenAcquisition = tokenAcquisition;
-        }
-
         [HttpGet("{eventId}")]
         public async Task<GetEventModelApiDto?> GetEvent(string eventId, CancellationToken cancellationToken)
         {
@@ -62,17 +48,9 @@ namespace MadLearning.API.Controllers
         }
 
         [HttpPut("{eventId}")]
-        public async Task RSVPToEvent([FromQuery] string eventId, CancellationToken cancellationToken)
+        public async Task RSVPToEvent(string eventId, CancellationToken cancellationToken)
         {
-            if (this.HttpContext.User == null || this.HttpContext.User.Identity?.Name == null)
-            {
-                throw new Exception("HttpContext nullable error");
-            }
-
-            var email = this.HttpContext.User.Identity.Name;
-            var firstName = this.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.GivenName).Value;
-            var lastName = this.HttpContext.User.Claims.Single(c => c.Type == ClaimTypes.Surname).Value;
-            await this.Mediator.Send(new RSVPToEvent(eventId, email, firstName, lastName), cancellationToken);
+            await this.Mediator.Send(new RSVPToEvent(eventId), cancellationToken);
         }
     }
 }
