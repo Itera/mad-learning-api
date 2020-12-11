@@ -1,6 +1,7 @@
 ﻿using MadLearning.API.Application.Persistence;
 using MadLearning.API.Application.Services;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace MadLearning.API.Application.Events.Commands
 {
     public sealed record RSVPToEvent(string Id) : IRequest;
 
-    internal sealed record RSVPToEventCommandHandler(IEventRepository repository, ICurrentUserService currentUserService, ICalendarService calendarService) : IRequestHandler<RSVPToEvent>
+    internal sealed record RSVPToEventCommandHandler(ILogger<RSVPToEventCommandHandler> logger, IEventRepository repository, ICurrentUserService currentUserService, ICalendarService calendarService) : IRequestHandler<RSVPToEvent>
     {
         public async Task<Unit> Handle(RSVPToEvent request, CancellationToken cancellationToken)
         {
@@ -16,7 +17,7 @@ namespace MadLearning.API.Application.Events.Commands
             {
                 var currentUser = this.currentUserService.GetUserInfo();
 
-                await this.repository.RSVPToEvent(request.Id, currentUser.Email, currentUser.FirstName, currentUser.LastName, cancellationToken);
+                await this.repository.RSVPToEvent(request.Id, currentUser.Id, currentUser.Email, currentUser.FirstName, currentUser.LastName, cancellationToken);
 
                 var eventModel = await this.repository.GetEvent(request.Id, cancellationToken);
 
@@ -28,6 +29,16 @@ namespace MadLearning.API.Application.Events.Commands
             }
             catch (StorageException e)
             {
+                this.logger.LogError(e, "Could not store event RSVP");
+
+                throw new EventException(e.Message, e);
+            }
+            catch (CalendarException e)
+            {
+                this.logger.LogError(e, "Could not access Calendar");
+
+                // Un-RSVP? :D
+
                 throw new EventException(e.Message, e);
             }
         }

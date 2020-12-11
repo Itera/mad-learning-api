@@ -32,9 +32,10 @@ namespace MadLearning.API.Application.Events.Commands
             {
                 createdEvent = await this.repository.CreateEvent(eventModel, cancellationToken);
 
-                var calendarEventId = await this.calendarService.AddEvent(createdEvent, cancellationToken);
+                var (calendarEventId, calendarEventUid) = await this.calendarService.AddEvent(createdEvent, cancellationToken);
 
                 createdEvent.CalendarId = calendarEventId;
+                createdEvent.CalendarUid = calendarEventUid;
 
                 await this.repository.UpdateEvent(createdEvent, cancellationToken);
 

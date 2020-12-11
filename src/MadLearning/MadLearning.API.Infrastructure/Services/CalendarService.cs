@@ -20,14 +20,14 @@ namespace MadLearning.API.Infrastructure.Services
             this.currentUserService = currentUserService;
         }
 
-        public async Task<string> AddEvent(EventModel eventModel, CancellationToken cancellationToken)
+        public async Task<(string EventId, string EventUid)> AddEvent(EventModel eventModel, CancellationToken cancellationToken)
         {
             var @event = ToCalendarEvent(eventModel);
 
             try
             {
                 var calendarEvent = await this.graphServiceClient.Me.Events.Request().AddAsync(@event, cancellationToken);
-                return calendarEvent.Id;
+                return (calendarEvent.Id, calendarEvent.ICalUId);
             }
             catch (Exception e)
             {
@@ -38,6 +38,7 @@ namespace MadLearning.API.Infrastructure.Services
         public async Task RsvpToEvent(EventModel eventModel, CancellationToken cancellationToken)
         {
             var eventId = eventModel.CalendarId;
+            var eventUid = eventModel.CalendarUid;
 
             try
             {
@@ -46,33 +47,41 @@ namespace MadLearning.API.Infrastructure.Services
 
                 var currentUser = this.currentUserService.GetUserInfo();
 
+                var ownEvents = await this.graphServiceClient.Me.Events.Request().Filter($"iCalUId eq '{eventUid}'").GetAsync(cancellationToken);
+                if (ownEvents.Count != 1)
+                    throw new Exception("Couldn't find event to RSVP");
+
                 var events = this.graphServiceClient.Users[eventModel.Owner.Email].Events[eventId];
 
-                var existingEvent = await events.Request().GetAsync(cancellationToken);
+                var request = events.Accept(SendResponse: true).Request();
 
-                if (existingEvent.Attendees?.Any(a => a.EmailAddress.Address == currentUser.Email) ?? false)
-                    return;
+                await request.PostAsync(cancellationToken);
 
-                // TODO: not concurrency safe...
+                //var existingEvent = await events.Request().GetAsync(cancellationToken);
 
-                var attendees = existingEvent.Attendees?.ToList() ?? new ();
-                attendees.Add(new Attendee
-                {
-                    EmailAddress = new EmailAddress
-                    {
-                        Address = currentUser.Email,
-                        Name = currentUser.FullName,
-                    },
-                    Type = AttendeeType.Optional,
-                });
+                //if (existingEvent.Attendees?.Any(a => a.EmailAddress.Address == currentUser.Email) ?? false)
+                //    return;
 
-                var @event = new Event
-                {
-                    Id = eventId,
-                    Attendees = attendees,
-                };
+                //// TODO: not concurrency safe...
 
-                await events.Request().UpdateAsync(@event, cancellationToken);
+                //var attendees = existingEvent.Attendees?.ToList() ?? new ();
+                //attendees.Add(new Attendee
+                //{
+                //    EmailAddress = new EmailAddress
+                //    {
+                //        Address = currentUser.Email,
+                //        Name = currentUser.FullName,
+                //    },
+                //    Type = AttendeeType.Optional,
+                //});
+
+                //var @event = new Event
+                //{
+                //    Id = eventId,
+                //    Attendees = attendees,
+                //};
+
+                //await events.Request().UpdateAsync(@event, cancellationToken);
             }
             catch (Exception e)
             {

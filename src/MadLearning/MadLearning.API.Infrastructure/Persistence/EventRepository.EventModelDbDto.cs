@@ -17,6 +17,8 @@ namespace MadLearning.API.Infrastructure.Persistence
 
             public string? CalendarId { get; set; }
 
+            public string? CalendarUid { get; set; }
+
             public DateTimeOffset StartTime { get; set; }
 
             public DateTimeOffset EndTime { get; set; }
@@ -47,6 +49,7 @@ namespace MadLearning.API.Infrastructure.Persistence
                 return new EventModel(
                     this.Id,
                     this.CalendarId,
+                    this.CalendarUid,
                     this.Name,
                     this.Description,
                     this.StartTime,
@@ -70,6 +73,8 @@ namespace MadLearning.API.Infrastructure.Persistence
             return new EventRepository.EventModelDbDto
             {
                 Id = model.Id,
+                CalendarId = model.CalendarId,
+                CalendarUid = model.CalendarUid,
                 Name = model.Name,
                 Description = model.Description,
                 ImageUrl = model.ImageUrl,

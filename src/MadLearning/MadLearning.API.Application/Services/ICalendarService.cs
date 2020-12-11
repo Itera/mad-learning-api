@@ -6,7 +6,7 @@ namespace MadLearning.API.Application.Services
 {
     public interface ICalendarService
     {
-        Task<string> AddEvent(EventModel eventModel, CancellationToken cancellationToken);
+        Task<(string EventId, string EventUid)> AddEvent(EventModel eventModel, CancellationToken cancellationToken);
 
         Task RsvpToEvent(EventModel eventModel, CancellationToken cancellationToken);
     }

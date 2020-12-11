@@ -18,6 +18,6 @@ namespace MadLearning.API.Application.Persistence
 
         Task UpdateEvent(EventModel eventModel, CancellationToken cancellationToken);
 
-        Task RSVPToEvent(string id, string email, string firstName, string lastName, CancellationToken cancellationToken);
+        Task RSVPToEvent(string id, string userId, string email, string firstName, string lastName, CancellationToken cancellationToken);
     }
 }

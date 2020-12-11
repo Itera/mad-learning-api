@@ -17,6 +17,7 @@ namespace MadLearning.API.Application.Events.Commands
             var eventModel = EventModel.Update(
                 request.dto.Id,
                 request.dto.CalendarId,
+                request.dto.CalendarUid,
                 request.dto.Name,
                 request.dto.Description,
                 request.dto.StartTime,
