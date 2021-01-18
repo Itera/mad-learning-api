@@ -34,10 +34,13 @@ namespace MadLearning.API.Application.Events.Commands
 
                 var (calendarEventId, calendarEventUid) = await this.calendarService.AddEvent(createdEvent, cancellationToken);
 
-                createdEvent.CalendarId = calendarEventId;
-                createdEvent.CalendarUid = calendarEventUid;
+                if (!string.IsNullOrWhiteSpace(calendarEventId) || !string.IsNullOrWhiteSpace(calendarEventUid))
+                {
+                    createdEvent.CalendarId = calendarEventId;
+                    createdEvent.CalendarUid = calendarEventUid;
 
-                await this.repository.UpdateEvent(createdEvent, cancellationToken);
+                    await this.repository.UpdateEvent(createdEvent, cancellationToken);
+                }
 
                 return createdEvent.ToApiDto();
             }

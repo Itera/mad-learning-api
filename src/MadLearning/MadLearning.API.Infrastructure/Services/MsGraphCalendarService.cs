@@ -3,24 +3,23 @@ using MadLearning.API.Domain.Entities;
 using Microsoft.Graph;
 using Microsoft.Graph.Extensions;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MadLearning.API.Infrastructure.Services
 {
-    public class CalendarService : ICalendarService
+    internal sealed class MsGraphCalendarService : ICalendarService
     {
         private readonly GraphServiceClient graphServiceClient;
         private readonly ICurrentUserService currentUserService;
 
-        public CalendarService(GraphServiceClient graphServiceClient, ICurrentUserService currentUserService)
+        public MsGraphCalendarService(GraphServiceClient graphServiceClient, ICurrentUserService currentUserService)
         {
             this.graphServiceClient = graphServiceClient;
             this.currentUserService = currentUserService;
         }
 
-        public async Task<(string EventId, string EventUid)> AddEvent(EventModel eventModel, CancellationToken cancellationToken)
+        public async Task<(string? EventId, string? EventUid)> AddEvent(EventModel eventModel, CancellationToken cancellationToken)
         {
             var @event = ToCalendarEvent(eventModel);
 
