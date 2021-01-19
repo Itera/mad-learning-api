@@ -1,7 +1,6 @@
 ﻿using MadLearning.API.Application.Dtos;
 using MadLearning.API.Application.Events.Commands;
 using MadLearning.API.Application.Events.Queries;
-using MadLearning.API.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -41,10 +40,10 @@ namespace MadLearning.API.Controllers
             await this.Mediator.Send(new UpdateEvent(eventModel), cancellationToken);
         }
 
-        [HttpDelete]
-        public async Task DeleteEvent([FromBody] DeleteEventModelApiDto eventModel, CancellationToken cancellationToken)
+        [HttpDelete("{eventId}")]
+        public async Task DeleteEvent(string eventId, CancellationToken cancellationToken)
         {
-            await this.Mediator.Send(new DeleteEvent(eventModel), cancellationToken);
+            await this.Mediator.Send(new DeleteEvent(eventId), cancellationToken);
         }
 
         [HttpPut("{eventId}")]
