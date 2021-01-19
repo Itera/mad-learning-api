@@ -41,11 +41,19 @@ namespace MadLearning.API.Controllers
             await this.Mediator.Send(new UpdateEvent(eventModel), cancellationToken);
         }
 
+        [HttpDelete("{eventId}")]
+        public async Task DeleteEvent(string eventId, CancellationToken cancellationToken)
+        {
+            await this.Mediator.Send(new DeleteEvent(eventId), cancellationToken);
+        }
+
+        /*
         [HttpDelete]
         public async Task DeleteEvent([FromBody] DeleteEventModelApiDto eventModel, CancellationToken cancellationToken)
         {
             await this.Mediator.Send(new DeleteEvent(eventModel), cancellationToken);
         }
+    */
 
         [HttpPut("{eventId}")]
         public async Task RSVPToEvent(string eventId, CancellationToken cancellationToken)
