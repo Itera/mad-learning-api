@@ -1,7 +1,6 @@
 ﻿using MadLearning.API.Application.Dtos;
 using MadLearning.API.Application.Events.Commands;
 using MadLearning.API.Application.Events.Queries;
-using MadLearning.API.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
