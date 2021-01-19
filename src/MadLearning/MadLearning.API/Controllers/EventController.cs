@@ -1,11 +1,9 @@
 ﻿using MadLearning.API.Application.Dtos;
 using MadLearning.API.Application.Events.Commands;
 using MadLearning.API.Application.Events.Queries;
+using MadLearning.API.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.Resource;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,15 +15,6 @@ namespace MadLearning.API.Controllers
     [Route("[controller]")]
     public sealed class EventController : ApiControllerBase
     {
-        private readonly ITokenAcquisition tokenAcquisition;
-        private IConfiguration configuration;
-
-        public EventController(IConfiguration configuration, ITokenAcquisition tokenAcquisition)
-        {
-            this.configuration = configuration;
-            this.tokenAcquisition = tokenAcquisition;
-        }
-
         [HttpGet("{eventId}")]
         public async Task<GetEventModelApiDto?> GetEvent(string eventId, CancellationToken cancellationToken)
         {
@@ -41,7 +30,7 @@ namespace MadLearning.API.Controllers
         [HttpPost]
         public async Task<GetEventModelApiDto?> CreateEvent([FromBody] CreateEventModelApiDto eventModel, CancellationToken cancellationToken)
         {
-            this.HttpContext.VerifyUserHasAnyAcceptedScope(this.configuration["ApiScope"]);
+            //this.HttpContext.VerifyUserHasAnyAcceptedScope(this.configuration["ApiScope"]);
 
             return await this.Mediator.Send(new CreateEvent(eventModel), cancellationToken);
         }
@@ -56,6 +45,12 @@ namespace MadLearning.API.Controllers
         public async Task DeleteEvent([FromBody] DeleteEventModelApiDto eventModel, CancellationToken cancellationToken)
         {
             await this.Mediator.Send(new DeleteEvent(eventModel), cancellationToken);
+        }
+
+        [HttpPut("{eventId}")]
+        public async Task RSVPToEvent(string eventId, CancellationToken cancellationToken)
+        {
+            await this.Mediator.Send(new RSVPToEvent(eventId), cancellationToken);
         }
     }
 }

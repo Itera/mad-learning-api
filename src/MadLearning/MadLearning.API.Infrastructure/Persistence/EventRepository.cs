@@ -53,6 +53,7 @@ namespace MadLearning.API.Infrastructure.Persistence
 
                 return dtos
                     .Select(dto => dto.ToEventModel())
+                    .OrderBy(dto => dto.StartTime)
                     .ToList();
             }
             catch (Exception e) when (e is TimeoutException || e is MongoException)
@@ -103,6 +104,21 @@ namespace MadLearning.API.Infrastructure.Persistence
             try
             {
                 await this.collection.ReplaceOneAsync(ev => ev.Id == eventModel.Id, eventModel.ToDbDto(), cancellationToken: cancellationToken);
+            }
+            catch (Exception e) when (e is TimeoutException || e is MongoException)
+            {
+                throw new StorageException(e.Message, e);
+            }
+        }
+
+        public async Task RSVPToEvent(string id, string userId, string email, string firstName, string lastName, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await this.collection.UpdateOneAsync(
+                    Builders<EventModelDbDto>.Filter.Where(dto => dto.Id == id && dto.Owner!.Email != email),
+                    Builders<EventModelDbDto>.Update.AddToSet("Participants", new PersonModelDbDto { Id = userId, Email = email, FirstName = firstName, LastName = lastName }),
+                    cancellationToken: cancellationToken);
             }
             catch (Exception e) when (e is TimeoutException || e is MongoException)
             {

@@ -3,7 +3,6 @@ using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
 using Hangfire.Mongo.Migration.Strategies.Backup;
 using MadLearning.API.Application.Persistence;
-using MadLearning.API.Application.Service;
 using MadLearning.API.Application.Services;
 using MadLearning.API.Infrastructure.Configuration;
 using MadLearning.API.Infrastructure.Persistence;
@@ -36,7 +35,7 @@ namespace MadLearning.API.Infrastructure
                 services.AddSingleton(sp => new MongoClient(sp.GetRequiredService<EventDbSettings>().ConnectionString));
                 services.AddSingleton<IEventRepository, EventRepository>();
                 services.AddSingleton<IIdGenerator, IdGenerator>();
-                services.AddTransient<ICalendarService, CalendarService>();
+                services.AddTransient<ICalendarService, NoopCalendarService>(); // TODO fic calendar service
 
                 services.Configure<SlackOptions>(
                         configuration.GetSection(nameof(SlackOptions)));
@@ -71,6 +70,8 @@ namespace MadLearning.API.Infrastructure
                 services.AddSingleton<IJobScheduler, HangfireJobScheduler>();
 
                 services.AddSingleton<ITimeZoneService, TimeZoneService>();
+
+                services.AddSingleton<ICurrentUserService, AspNetCoreCurrentUserService>();
             }
 
             return services;

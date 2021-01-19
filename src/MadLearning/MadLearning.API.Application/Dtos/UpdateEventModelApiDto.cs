@@ -5,6 +5,8 @@ namespace MadLearning.API.Application.Dtos
 {
     public record UpdateEventModelApiDto(
         string Id,
+        string CalendarId,
+        string CalendarUid,
         string Name,
         string Description,
         DateTimeOffset StartTime,
