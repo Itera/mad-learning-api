@@ -1,6 +1,7 @@
 ﻿using MadLearning.API.Application.Dtos;
 using MadLearning.API.Application.Mapping;
 using MadLearning.API.Application.Persistence;
+using MadLearning.API.Application.Services;
 using MadLearning.API.Domain.Entities;
 using MediatR;
 using System.Threading;
@@ -10,7 +11,7 @@ namespace MadLearning.API.Application.Events.Commands
 {
     public sealed record UpdateEvent(UpdateEventModelApiDto dto) : IRequest;
 
-    internal sealed record UpdateEventCommandHandler(IEventRepository repository) : IRequestHandler<UpdateEvent>
+    internal sealed record UpdateEventCommandHandler(IEventRepository repository, ICurrentUserService currentUserService/*, ICalendarService calendarService*/) : IRequestHandler<UpdateEvent>
     {
         public async Task<Unit> Handle(UpdateEvent request, CancellationToken cancellationToken)
         {
@@ -30,8 +31,16 @@ namespace MadLearning.API.Application.Events.Commands
 
             try
             {
+                var currentUser = this.currentUserService.GetUserInfo();
+
                 await this.repository.UpdateEvent(eventModel, cancellationToken);
 
+                var refreshPage = await this.repository.GetEvent(request.dto.Id, cancellationToken);
+
+                if (refreshPage is null)
+                    throw new EventException("Could not get event from database");
+
+                //await this.calendarService.UpdateEvent(eventModel, cancellationToken);
                 return Unit.Value;
             }
             catch (StorageException e)
