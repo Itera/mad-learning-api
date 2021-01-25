@@ -104,12 +104,7 @@ namespace MadLearning.API.Domain.Entities
             if (string.IsNullOrWhiteSpace(description))
                 throw new ArgumentException("Event description is null or whitespace", nameof(name));
 
-            if (startTime < DateTimeOffset.UtcNow)
-                throw new ArgumentOutOfRangeException(nameof(startTime), "Starttime cannot be in the past");
-            if (endTime < DateTimeOffset.UtcNow)
-                throw new ArgumentOutOfRangeException(nameof(endTime), "Endtime cannot be in the past");
-            if (startTime == endTime)
-                throw new ArgumentException("Starttime and endtime cannot be the same value", $"{nameof(startTime)}|{nameof(endTime)}");
+            ValidateStartAndEndTime(startTime, endTime);
 
             var isUpdate =
                 name != this.Name ||
@@ -149,9 +144,21 @@ namespace MadLearning.API.Domain.Entities
             if (string.IsNullOrWhiteSpace(description))
                 throw new ArgumentException("Event description is null or whitespace");
 
+            ValidateStartAndEndTime(startTime, endTime);
+
             var @event = new EventModel(name, description, startTime, endTime, imageUrl, imageAlt, location, eventType, owner, null);
 
             return @event;
+        }
+
+        private static void ValidateStartAndEndTime(DateTimeOffset startTime, DateTimeOffset endTime)
+        {
+            if (startTime < DateTimeOffset.UtcNow)
+                throw new ArgumentOutOfRangeException(nameof(startTime), "Starttime cannot be in the past");
+            if (endTime < DateTimeOffset.UtcNow)
+                throw new ArgumentOutOfRangeException(nameof(endTime), "Endtime cannot be in the past");
+            if (startTime == endTime)
+                throw new ArgumentException("Starttime and endtime cannot be the same value", $"{nameof(startTime)}|{nameof(endTime)}");
         }
     }
 }
