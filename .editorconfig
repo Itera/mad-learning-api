@@ -280,3 +280,6 @@ dotnet_diagnostic.CA2234.severity = none
 
 # CA1032: Implement standard exception constructors
 dotnet_diagnostic.CA1032.severity = none
+
+# SA1602: Enumeration items should be documented
+dotnet_diagnostic.SA1602.severity = none

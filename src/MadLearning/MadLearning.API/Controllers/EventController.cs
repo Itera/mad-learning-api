@@ -29,8 +29,6 @@ namespace MadLearning.API.Controllers
         [HttpPost]
         public async Task<GetEventModelApiDto?> CreateEvent([FromBody] CreateEventModelApiDto eventModel, CancellationToken cancellationToken)
         {
-            //this.HttpContext.VerifyUserHasAnyAcceptedScope(this.configuration["ApiScope"]);
-
             return await this.Mediator.Send(new CreateEvent(eventModel), cancellationToken);
         }
 

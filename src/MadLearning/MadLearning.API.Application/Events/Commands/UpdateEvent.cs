@@ -33,7 +33,8 @@ namespace MadLearning.API.Application.Events.Commands
                     request.dto.EndTime,
                     request.dto.ImageUrl,
                     request.dto.ImageAlt,
-                    request.dto.Location);
+                    request.dto.Location,
+                    request.dto.EventType);
 
                 if (!isUpdate)
                     return Unit.Value;

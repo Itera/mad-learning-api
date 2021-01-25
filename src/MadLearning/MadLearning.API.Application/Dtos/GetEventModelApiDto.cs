@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MadLearning.API.Domain.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace MadLearning.API.Application.Dtos
@@ -12,6 +13,7 @@ namespace MadLearning.API.Application.Dtos
         string? ImageUrl,
         string? ImageAlt,
         string? Location,
+        EventType EventType,
         PersonModelApiDto? Owner,
         IEnumerable<PersonModelApiDto>? Participants);
 }
