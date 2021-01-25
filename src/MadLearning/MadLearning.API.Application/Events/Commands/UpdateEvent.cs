@@ -1,6 +1,7 @@
 ﻿using MadLearning.API.Application.Dtos;
 using MadLearning.API.Application.Persistence;
 using MadLearning.API.Application.Services;
+using MadLearning.API.Domain.Entities;
 using MediatR;
 using System;
 using System.Threading;
@@ -34,7 +35,7 @@ namespace MadLearning.API.Application.Events.Commands
                     request.dto.ImageUrl,
                     request.dto.ImageAlt,
                     request.dto.Location,
-                    request.dto.EventType);
+                    EventTypeUtil.Parse(request.dto.EventType));
 
                 if (!isUpdate)
                     return Unit.Value;

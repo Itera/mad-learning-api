@@ -20,7 +20,7 @@ namespace MadLearning.API.Application.Mapping
                 model.ImageUrl,
                 model.ImageAlt,
                 model.Location,
-                model.EventType,
+                model.EventType.ToName(),
                 model.Owner.ToApiDto(),
                 model.Participants.ToApiDtos());
         }

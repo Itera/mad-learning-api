@@ -107,7 +107,7 @@ namespace MadLearning.API.Domain.Entities
             if (startTime < DateTimeOffset.UtcNow)
                 throw new ArgumentOutOfRangeException(nameof(startTime), "Starttime cannot be in the past");
             if (endTime < DateTimeOffset.UtcNow)
-                throw new ArgumentOutOfRangeException(nameof(startTime), "Endtime cannot be in the past");
+                throw new ArgumentOutOfRangeException(nameof(endTime), "Endtime cannot be in the past");
             if (startTime == endTime)
                 throw new ArgumentException("Starttime and endtime cannot be the same value", $"{nameof(startTime)}|{nameof(endTime)}");
 

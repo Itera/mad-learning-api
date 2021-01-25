@@ -11,6 +11,6 @@ namespace MadLearning.API.Application.Dtos
         string? ImageUrl,
         string? ImageAlt,
         string? Location,
-        EventType EventType,
+        string EventType,
         PersonModelApiDto Owner);
 }
