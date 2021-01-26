@@ -39,6 +39,7 @@ namespace MadLearning.API.Application.HostedServices
             var imageUrl = "https://itera-cdn.azureedge.net/contentassets/df1f34b7803045fa95ffd4529826f2b2/kristian-redi-2.jpg?quality=60&Cache=Always&width=1148&mode=crop&scale=both";
             var imageAlt = "Picture of programmers";
             var location = "Jernlageret";
+            var eventType = EventType.CodingEvent;
 
             await this.eventRepository.CreateEvent(
                 EventModel.Create(
@@ -49,6 +50,7 @@ namespace MadLearning.API.Application.HostedServices
                 imageUrl,
                 imageAlt,
                 location,
+                eventType,
                 new PersonModel(this.idGenerator.Generate(), "Raymond", "Selvik", "raymond.selvik@itera.no")),
                 cancellationToken);
 
@@ -61,6 +63,7 @@ namespace MadLearning.API.Application.HostedServices
                 imageUrl,
                 imageAlt,
                 location,
+                eventType,
                 new PersonModel(this.idGenerator.Generate(), "Tin Anh", "Nguyen", "tin.anh.nguyen@itera.no")),
                 cancellationToken);
 
@@ -73,6 +76,7 @@ namespace MadLearning.API.Application.HostedServices
                 imageUrl,
                 imageAlt,
                 location,
+                eventType,
                 new PersonModel(this.idGenerator.Generate(), "Tin Anh", "Nguyen", "tin.anh.nguyen@itera.no")),
                 cancellationToken);
 
@@ -85,6 +89,7 @@ namespace MadLearning.API.Application.HostedServices
                 imageUrl,
                 imageAlt,
                 location,
+                eventType,
                 new PersonModel(this.idGenerator.Generate(), "Martin", "Othamar", "martin.othamar@itera.no")),
                 cancellationToken);
 
@@ -97,6 +102,7 @@ namespace MadLearning.API.Application.HostedServices
                 imageUrl,
                 imageAlt,
                 location,
+                eventType,
                 new PersonModel(this.idGenerator.Generate(), "Lars Erik", "Røise", "lars.erik.roise@itera.no")),
                 cancellationToken);
 
@@ -109,6 +115,7 @@ namespace MadLearning.API.Application.HostedServices
                 imageUrl,
                 imageAlt,
                 location,
+                eventType,
                 new PersonModel(this.idGenerator.Generate(), "Klara", "Opdahl", "klara.opdahl@itera.no")),
                 cancellationToken);
 
@@ -121,6 +128,7 @@ namespace MadLearning.API.Application.HostedServices
                 imageUrl,
                 imageAlt,
                 location,
+                eventType,
                 new PersonModel(this.idGenerator.Generate(), "Øyvind", "Nedregård", "oyvind.nedregard@itera.no")),
                 cancellationToken);
 
@@ -133,6 +141,7 @@ namespace MadLearning.API.Application.HostedServices
                 imageUrl,
                 imageAlt,
                 location,
+                eventType,
                 new PersonModel(this.idGenerator.Generate(), "Martin", "Othamar", "martin.othamar@itera.no")),
                 cancellationToken);
         }

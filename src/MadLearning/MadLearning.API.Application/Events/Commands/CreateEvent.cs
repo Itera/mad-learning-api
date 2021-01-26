@@ -24,6 +24,7 @@ namespace MadLearning.API.Application.Events.Commands
                     request.dto.ImageUrl,
                     request.dto.ImageAlt,
                     request.dto.Location,
+                    EventTypeUtil.Parse(request.dto.EventType),
                     request.dto.Owner.ToPersonModel()!);
 
             EventModel? createdEvent = null;

@@ -2,10 +2,12 @@
 using MadLearning.API.Application.Persistence;
 using MadLearning.API.Domain.Entities;
 using MadLearning.API.Infrastructure.Configuration;
+using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -109,6 +111,26 @@ namespace MadLearning.API.Infrastructure.Persistence
             {
                 throw new StorageException(e.Message, e);
             }
+        }
+
+        public async Task<EventModel> Update(EventModel eventModel, CancellationToken cancellationToken, params (string PropertyName, object PropertyValue)[] updateFieldDefinitions)
+        {
+            var builder = new UpdateDefinitionBuilder<EventModelDbDto>();
+            var options = new FindOneAndUpdateOptions<EventModelDbDto>
+            {
+                ReturnDocument = ReturnDocument.After,
+                IsUpsert = false,
+            };
+
+            var updates = updateFieldDefinitions
+                .Select(updateFieldDefinition => builder.Set(updateFieldDefinition.PropertyName, updateFieldDefinition.PropertyValue))
+                .ToList();
+
+            var filter = Builders<EventModelDbDto>.Filter.Eq(e => e.Id, eventModel.Id);
+            var updateCmd = builder.Combine(updates);
+            var result = await this.collection.FindOneAndUpdateAsync(filter, updateCmd, options, cancellationToken);
+
+            return result.ToEventModel();
         }
 
         public async Task RSVPToEvent(string id, string userId, string email, string firstName, string lastName, CancellationToken cancellationToken)
