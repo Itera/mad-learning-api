@@ -14,12 +14,15 @@ namespace MadLearning.API
 {
     internal sealed class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             this.Configuration = configuration;
+            this.Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+
+        public IHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -34,9 +37,13 @@ namespace MadLearning.API
 
             services.AddCors(options =>
             {
+                var origins = this.Environment.IsDevelopment() ?
+                    new[] { "http://localhost:3000", "https://localhost:3000" } :
+                    new[] { "https://learning.mad.itera.no" };
+
                 options.AddDefaultPolicy(
                     builder => builder
-                        .WithOrigins("http://localhost:3000", "https://learning.mad.itera.no")
+                        .WithOrigins(origins)
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });
