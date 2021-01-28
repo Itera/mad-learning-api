@@ -38,7 +38,7 @@ namespace MadLearning.API.Application.Events.Commands
                 }
                 else
                 {
-                    if (eventModel.Participants.Any(p => p.Id != currentUser.Id))
+                    if (!eventModel.Participants.Any(p => p.Id == currentUser.Id))
                     {
                         throw new Exception("User has already dropped event.");
                     }
