@@ -30,7 +30,7 @@ namespace MadLearning.API.Application.Events.Commands
                 }
                else
                 {
-                    await this.repository.DropEvent(request.Id, currentUser.Id, currentUser.Email, currentUser.FirstName, currentUser.LastName, cancellationToken);
+                    await this.repository.DropEvent(request.Id, currentUser.Id, currentUser.Email, cancellationToken);
 
                     //await this.calendarService.DropEvent(eventModel, cancellationToken); TO DO: remove event from calendar.
                     return Unit.Value;
