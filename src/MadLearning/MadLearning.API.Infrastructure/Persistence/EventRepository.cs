@@ -148,7 +148,7 @@ namespace MadLearning.API.Infrastructure.Persistence
             }
         }
 
-        public async Task DropEvent(string id, string userId, string email, string firstName, string lastName, CancellationToken cancellationToken)
+        public async Task DropEvent(string id, string userId, string email, CancellationToken cancellationToken)
         {
             try
             {
