@@ -133,7 +133,7 @@ namespace MadLearning.API.Infrastructure.Persistence
             return result.ToEventModel();
         }
 
-        public async Task RSVPToEvent(string id, string userId, string email, string firstName, string lastName, CancellationToken cancellationToken)
+        public async Task JoinEvent(string id, string userId, string email, string firstName, string lastName, CancellationToken cancellationToken)
         {
             try
             {
@@ -148,7 +148,7 @@ namespace MadLearning.API.Infrastructure.Persistence
             }
         }
 
-        public async Task DropEvent(string id, string userId, string email, string firstName, string lastName, CancellationToken cancellationToken)
+        public async Task DropEvent(string id, string userId, string email, CancellationToken cancellationToken)
         {
             try
             {

@@ -2,16 +2,18 @@
 using MadLearning.API.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MadLearning.API.Application.Events.Commands
 {
-    public sealed record RSVPToEvent(string Id, string Rsvp) : IRequest;
+    public sealed record JoinOrDropEvent(string Id, string Rsvp) : IRequest;
 
-    internal sealed record RSVPToEventCommandHandler(ILogger<RSVPToEventCommandHandler> logger, IEventRepository repository, ICurrentUserService currentUserService, ICalendarService calendarService) : IRequestHandler<RSVPToEvent>
+    internal sealed record RSVPToEventCommandHandler(ILogger<RSVPToEventCommandHandler> logger, IEventRepository repository, ICurrentUserService currentUserService, ICalendarService calendarService) : IRequestHandler<JoinOrDropEvent>
     {
-        public async Task<Unit> Handle(RSVPToEvent request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(JoinOrDropEvent request, CancellationToken cancellationToken)
         {
             try
             {
@@ -23,14 +25,25 @@ namespace MadLearning.API.Application.Events.Commands
 
                 if (request.Rsvp == "join")
                 {
-                    await this.repository.RSVPToEvent(request.Id, currentUser.Id, currentUser.Email, currentUser.FirstName, currentUser.LastName, cancellationToken);
+                    if (eventModel.Participants.Any(p => p.Id == currentUser.Id))
+                    {
+                        throw new Exception("User has already joined event.");
+                    }
 
-                    await this.calendarService.RsvpToEvent(eventModel, cancellationToken);
+                    await this.repository.JoinEvent(request.Id, currentUser.Id, currentUser.Email, currentUser.FirstName, currentUser.LastName, cancellationToken);
+
+                    await this.calendarService.JoinEvent(eventModel, cancellationToken);
+
                     return Unit.Value;
                 }
-               else
+                else
                 {
-                    await this.repository.DropEvent(request.Id, currentUser.Id, currentUser.Email, currentUser.FirstName, currentUser.LastName, cancellationToken);
+                    if (eventModel.Participants.Any(p => p.Id != currentUser.Id))
+                    {
+                        throw new Exception("User has already dropped event.");
+                    }
+
+                    await this.repository.DropEvent(request.Id, currentUser.Id, currentUser.Email, cancellationToken);
 
                     //await this.calendarService.DropEvent(eventModel, cancellationToken); TO DO: remove event from calendar.
                     return Unit.Value;
@@ -45,8 +58,6 @@ namespace MadLearning.API.Application.Events.Commands
             catch (CalendarException e)
             {
                 this.logger.LogError(e, "Could not access Calendar");
-
-                // Un-RSVP? :D
 
                 throw new EventException(e.Message, e);
             }
