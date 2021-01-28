@@ -8,6 +8,6 @@ namespace MadLearning.API.Application.Services
     {
         Task<(string? EventId, string? EventUid)> AddEvent(EventModel eventModel, CancellationToken cancellationToken);
 
-        Task RsvpToEvent(EventModel eventModel, CancellationToken cancellationToken);
+        Task JoinEvent(EventModel eventModel, CancellationToken cancellationToken);
     }
 }

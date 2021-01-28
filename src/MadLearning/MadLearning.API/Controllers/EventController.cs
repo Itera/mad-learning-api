@@ -45,9 +45,9 @@ namespace MadLearning.API.Controllers
         }
 
         [HttpPut("{eventId}/{rsvp}")]
-        public async Task RSVPToEvent(string eventId, string rsvp, CancellationToken cancellationToken)
+        public async Task JoinOrDropEvent(string eventId, string rsvp, CancellationToken cancellationToken)
         {
-            await this.Mediator.Send(new RSVPToEvent(eventId, rsvp), cancellationToken);
+            await this.Mediator.Send(new JoinOrDropEvent(eventId, rsvp), cancellationToken);
         }
     }
 }
