@@ -34,7 +34,7 @@ namespace MadLearning.API.Infrastructure.Services
             }
         }
 
-        public async Task RsvpToEvent(EventModel eventModel, CancellationToken cancellationToken)
+        public async Task JoinEvent(EventModel eventModel, CancellationToken cancellationToken)
         {
             var eventId = eventModel.CalendarId;
             var eventUid = eventModel.CalendarUid;

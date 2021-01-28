@@ -133,13 +133,28 @@ namespace MadLearning.API.Infrastructure.Persistence
             return result.ToEventModel();
         }
 
-        public async Task RSVPToEvent(string id, string userId, string email, string firstName, string lastName, CancellationToken cancellationToken)
+        public async Task JoinEvent(string id, string userId, string email, string firstName, string lastName, CancellationToken cancellationToken)
         {
             try
             {
                 await this.collection.UpdateOneAsync(
                     Builders<EventModelDbDto>.Filter.Where(dto => dto.Id == id && dto.Owner!.Email != email),
                     Builders<EventModelDbDto>.Update.AddToSet("Participants", new PersonModelDbDto { Id = userId, Email = email, FirstName = firstName, LastName = lastName }),
+                    cancellationToken: cancellationToken);
+            }
+            catch (Exception e) when (e is TimeoutException || e is MongoException)
+            {
+                throw new StorageException(e.Message, e);
+            }
+        }
+
+        public async Task DropEvent(string id, string userId, string email, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await this.collection.UpdateOneAsync(
+                    Builders<EventModelDbDto>.Filter.Where(dto => dto.Id == id && dto.Owner!.Email != email),
+                    Builders<EventModelDbDto>.Update.PullFilter(dto => dto.Participants, dto => dto.Id == userId),
                     cancellationToken: cancellationToken);
             }
             catch (Exception e) when (e is TimeoutException || e is MongoException)

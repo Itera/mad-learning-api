@@ -12,7 +12,7 @@ namespace MadLearning.API.Infrastructure.Services
             return Task.FromResult((default(string), default(string)));
         }
 
-        public Task RsvpToEvent(EventModel eventModel, CancellationToken cancellationToken)
+        public Task JoinEvent(EventModel eventModel, CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
         }
