@@ -20,6 +20,7 @@ namespace MadLearning.API.Application.Persistence
 
         Task RSVPToEvent(string id, string userId, string email, string firstName, string lastName, CancellationToken cancellationToken);
 
-        Task DropEvent(string id, string userId, string email, string firstName, string lastName, CancellationToken cancellationToken);
+        Task DropEvent(string id, string userId, string email, CancellationToken cancellationToken);
+
     }
 }
