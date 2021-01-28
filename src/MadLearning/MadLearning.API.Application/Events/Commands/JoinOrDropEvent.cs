@@ -25,24 +25,12 @@ namespace MadLearning.API.Application.Events.Commands
 
                 if (request.Rsvp == "join")
                 {
-                    if (eventModel.Participants.Any(p => p.Id == currentUser.Id))
-                    {
-                        throw new Exception("User has already joined event.");
-                    }
-
                     await this.repository.JoinEvent(request.Id, currentUser.Id, currentUser.Email, currentUser.FirstName, currentUser.LastName, cancellationToken);
-
-                    await this.calendarService.JoinEvent(eventModel, cancellationToken);
 
                     return Unit.Value;
                 }
                 else
                 {
-                    if (eventModel.Participants.Any(p => p.Id != currentUser.Id))
-                    {
-                        throw new Exception("User has already dropped event.");
-                    }
-
                     await this.repository.DropEvent(request.Id, currentUser.Id, currentUser.Email, cancellationToken);
 
                     //await this.calendarService.DropEvent(eventModel, cancellationToken); TO DO: remove event from calendar.
