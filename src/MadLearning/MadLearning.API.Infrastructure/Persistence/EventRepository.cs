@@ -154,7 +154,7 @@ namespace MadLearning.API.Infrastructure.Persistence
             {
                 await this.collection.UpdateOneAsync(
                     Builders<EventModelDbDto>.Filter.Where(dto => dto.Id == id && dto.Owner!.Email != email),
-                    Builders<EventModelDbDto>.Update.PullFilter(p => p.Participants, f => f.Id == userId),
+                    Builders<EventModelDbDto>.Update.PullFilter(dto => dto.Participants, dto => dto.Id == userId),
                     cancellationToken: cancellationToken);
             }
             catch (Exception e) when (e is TimeoutException || e is MongoException)
