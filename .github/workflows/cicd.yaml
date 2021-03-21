@@ -37,7 +37,9 @@ jobs:
           jq -n
           '{
             "EventDbSettings": {
-              "ConnectionString": "mongodb://${{ secrets.APP_MONGODB_USERNAME }}:${{ secrets.APP_MONGODB_PASSWORD }}@mongodb:27017"
+              "EventCollectionName": "mad-learning-events",
+              "DatabaseName": "ite-mad-cosmosdb",
+              "ConnectionString": "${{ secrets.APP_DB_CONNECTIONSTRING }}"
             },
             "AzureAd": {
               "Instance": "${{ secrets.APP_AZUREAD_INSTANCE }}",
@@ -59,25 +61,6 @@ jobs:
           secret-type: 'generic'
           arguments:  --from-file=appsettings.Production.json
           secret-name: secret-appsettings
-      - name: 'Deploy MongoDB'
-        uses: 'deliverybot/helm@v1'
-        with:
-          release: 'mongodb'
-          namespace: '${{ env.NAMESPACE }}'
-          chart: 'https://charts.bitnami.com/bitnami/mongodb-10.0.5.tgz'
-          version: '4.4.2'
-          helm: 'helm3'
-          values: |
-            architecture: standalone
-            auth:
-              rootPassword: '${{ secrets.APP_MONGODB_PASSWORD }}'
-            global:
-              storageClass: 'default'
-            persistence:
-              storageClass: 'default'
-              size: 32Gi
-        env:
-          KUBECONFIG_FILE: '${{ secrets.MAD_KUBECONFIG }}'
       # Deploy app to AKS
       - uses: azure/k8s-deploy@v1
         with:

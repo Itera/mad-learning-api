@@ -1,7 +1,4 @@
 ﻿using Hangfire;
-using Hangfire.Mongo;
-using Hangfire.Mongo.Migration.Strategies;
-using Hangfire.Mongo.Migration.Strategies.Backup;
 using MadLearning.API.Application.Persistence;
 using MadLearning.API.Application.Services;
 using MadLearning.API.Infrastructure.Configuration;
@@ -52,15 +49,7 @@ namespace MadLearning.API.Infrastructure
                     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
-                    .UseMongoStorage(sp.GetRequiredService<MongoClient>(), $"{sp.GetRequiredService<EventDbSettings>().DatabaseName}hangfire", new MongoStorageOptions
-                    {
-                        MigrationOptions = new MongoMigrationOptions
-                        {
-                            MigrationStrategy = new MigrateMongoMigrationStrategy(),
-                            BackupStrategy = new CollectionMongoBackupStrategy(),
-                        },
-                        CheckConnection = true,
-                    }));
+                    .UseInMemoryStorage()); // Inmemory should be fine for now, 1 running instance. MongoDB storage has issues with CosmosDB
 
                 services.AddHangfireServer(serverOptions =>
                 {

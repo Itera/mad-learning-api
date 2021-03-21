@@ -19,8 +19,10 @@ namespace MadLearning.API.Infrastructure.Persistence
 
             public string? CalendarUid { get; set; }
 
+            [BsonRepresentation(BsonType.String)]
             public DateTimeOffset StartTime { get; set; }
 
+            [BsonRepresentation(BsonType.String)]
             public DateTimeOffset EndTime { get; set; }
 
             public string? Name { get; set; }
